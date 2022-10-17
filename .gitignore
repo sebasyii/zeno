@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+<<<<<<< HEAD
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -46,6 +47,24 @@ typings/
 
 # TypeScript cache
 *.tsbuildinfo
+=======
+
+# Dependencies
+node_modules/
+
+# Coverage
+coverage
+
+# Transpiled files
+build/
+
+# VS Code
+.vscode
+!.vscode/tasks.js
+
+# JetBrains IDEs
+.idea/
+>>>>>>> 8abc590 (Another initial commit)
 
 # Optional npm cache directory
 .npm
@@ -53,6 +72,7 @@ typings/
 # Optional eslint cache
 .eslintcache
 
+<<<<<<< HEAD
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
@@ -102,3 +122,7 @@ dist
 
 # TernJS port file
 .tern-port
+=======
+# Misc
+.DS_Store
+>>>>>>> 8abc590 (Another initial commit)
