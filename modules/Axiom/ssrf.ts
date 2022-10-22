@@ -65,11 +65,11 @@ class Axiom implements Axiom {
     }
 
     private checkACL = (ip: string, domain: string) => {
-        let ipAddr = ipaddr.process(ip);
+        let ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
         for (let i = 0; i < this.acl.length; i++) {
-            if (this.acl[i].type === 'ipv4' && ipAddr.kind() === 'ipv4' && ipAddr.match(this.acl[i].match as [ipaddr.IPv4, number])) {
+            if (this.acl[i].type === 'ipv4' && ipAddr && ipAddr.kind() === 'ipv4' && ipAddr.match(this.acl[i].match as [ipaddr.IPv4, number])) {
                 return this.acl[i].action === 'allow';
-            } else if (this.acl[i].type === 'ipv6' && ipAddr.kind() === 'ipv6' && ipAddr.match(this.acl[i].match as [ipaddr.IPv6, number])) {
+            } else if (this.acl[i].type === 'ipv6' && ipAddr && ipAddr.kind() === 'ipv6' && ipAddr.match(this.acl[i].match as [ipaddr.IPv6, number])) {
                 return this.acl[i].action === 'allow';
             } else if (this.acl[i].type === 'domain' && this.checkDomain(domain, this.acl[i].match as string)) {
                 return this.acl[i].action === 'allow';
