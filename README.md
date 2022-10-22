@@ -2,8 +2,9 @@
 
 A collection of modules to secure your [express.js](https://github.com/visionmedia/express) application.
 
-- [**Indirect**](./modules/Indirect/), an Express middleware that prevents [IDOR](https://portswigger.net/web-security/access-control/idor) vulnerabilities by securely converting between internal and external-facing object identifiers.
+- [**Indirect**](./modules/Indirect/), an [Express](https://github.com/expressjs/express) middleware that prevents [IDOR](https://portswigger.net/web-security/access-control/idor) vulnerabilities by securely converting between internal and external-facing object identifiers.
 - [**Axiom**](./modules/Axiom/), an ACL filter that prevents [SSRF](https://portswigger.net/web-security/ssrf) attacks by restricting connections at lookup-time.
+- [**Cradle**](./modules/Cradle/), a [cross-site websocket hijacking](https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking) filter for the [ws](https://github.com/websockets/ws) library.
 
 ## Installation
 
