@@ -2,12 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { RedisClientType } from '@redis/client/dist/lib/client';
 import { randomUUID } from 'crypto';
 
-interface IdorArgs {
+interface IndirectArgs {
   redisClient: RedisClientType;
   model: string;
 }
 
-interface Idor {
+interface Indirect {
   redisClient: RedisClientType;
 }
 
@@ -24,8 +24,8 @@ const newExternalID = (redisClient: RedisClientType) => {
   };
 }
 
-class Idor implements Idor {
-  constructor(args: IdorArgs) {
+class Indirect implements Indirect {
+  constructor(args: IndirectArgs) {
     this.redisClient = args.redisClient;
   }
 
@@ -60,4 +60,4 @@ class Idor implements Idor {
   };
 }
 
-export default Idor;
+export default Indirect;

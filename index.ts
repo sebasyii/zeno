@@ -1,3 +1,3 @@
-import Idor from './src/idor.js';
+import Indirect from './src/idor.js';
 
-export { Idor };
+export { Indirect };

@@ -1,11 +1,9 @@
-# Zeno - Good Middleware
+# Zeno
 
-An [express.js](https://github.com/visionmedia/express) middleware for SECURITY!
+A collection of modules to secure your [express.js](https://github.com/visionmedia/express) application.
 
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Changelog](#changelog)
-- [License](#license)
+- **Indirect**, an Express middleware that prevents [IDOR](https://portswigger.net/web-security/access-control/idor) vulnerabilities by securely converting between internal and external-facing object identifiers.
+- **Axiom**, a customizable SSRF whitelist/blacklist filter.
 
 ## Installation
 

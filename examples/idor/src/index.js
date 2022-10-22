@@ -1,6 +1,6 @@
 const express = require('express');
 const util = require('util');
-const { Idor } = require('zeno');
+const { Indirect } = require('zeno');
 
 const app = express();
 
@@ -13,7 +13,7 @@ const client = redis.createClient({
 
 client.connect();
 
-const idor = new Idor({
+const indirect = new Indirect({
     redisClient: client
 });
 
@@ -39,7 +39,7 @@ const registerUser = async (username, password) => {
 }
 
 // Parse the external id parameter using the "users" model
-app.get('/users/:id', idor.middleware("users"), async (req, res) => {
+app.get('/users/:id', indirect.middleware("users"), async (req, res) => {
     const id = req.params.id;
     const result = await getUser(id);
 
@@ -50,7 +50,7 @@ app.get('/users/:id', idor.middleware("users"), async (req, res) => {
     }
 });
 
-app.post('/users/register', idor.middleware(), async (req, res) => {
+app.post('/users/register', indirect.middleware(), async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const result = await registerUser(username, password);
