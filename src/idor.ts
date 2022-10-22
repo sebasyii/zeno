@@ -1,18 +1,63 @@
 import { NextFunction, Request, Response } from 'express';
+import { RedisClientType } from '@redis/client/dist/lib/client';
+import { randomUUID } from 'crypto';
 
-// create middleware
-const middleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<unknown> => {
-  // This middleware is used to help the user fetch the data from the database and send it to the client
+interface IdorArgs {
+  redisClient: RedisClientType;
+  model: string;
+}
 
-  // get the user id from the request
-  const userId = req.params.userId;
-  // database url
+interface Idor {
+  redisClient: RedisClientType;
+}
 
-  //  Lol Idk. I think we need to think of a structure on how the user will be able to use this middleware and what to parse in so we can help them fetch the data from the database and send it to the client
-};
+interface ZenoRequest extends Request {
+  newExternalID: (model: string, internalID: string) => string;
+}
 
-export default middleware;
+const newExternalID = (redisClient: RedisClientType) => {
+  return (model: string, internalID: string) => {
+    const externalID = randomUUID();
+    redisClient.HSET(model, externalID, internalID.toString());
+
+    return externalID;
+  };
+}
+
+class Idor implements Idor {
+  constructor(args: IdorArgs) {
+    this.redisClient = args.redisClient;
+  }
+
+  public middleware = (model: string) => {
+
+    return async (req: ZenoRequest, res: Response, next: NextFunction) => {
+
+      // Exposed method to generate external ID
+      req.newExternalID = newExternalID(this.redisClient);
+
+      if (model === undefined)
+        return next();
+
+      // Convert external IDs to internal IDs
+      for (const item of ['params', 'query', 'body']) {
+        for (const key in req[item]) {
+
+          const value = req[item][key];
+
+          if (value.length === 36) {
+            const internalID = await this.redisClient.HGET(model, value);
+
+            if (internalID) {
+              req[item][key] = internalID;
+            }
+          }
+        }
+      }
+
+      next();
+    };
+  };
+}
+
+export default Idor;

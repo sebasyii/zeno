@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=granite-numeric-canopener
+      - MYSQL_DATABASE=zeno
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+  web:
+    build:
+      context: ../../
+      dockerfile: ./examples/idor/Dockerfile
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=web
+      - MYSQL_PASSWORD=stingray-coleslaw-overbill
+      - MYSQL_DATABASE=zeno
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - db
+    restart: always
+      
+
