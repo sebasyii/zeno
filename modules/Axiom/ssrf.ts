@@ -8,8 +8,7 @@ interface axiomArgs {
 }
 
 interface Axiom {
-    blacklist: string[];
-    whitelist: string[];
+    acl: { host: string, action: string }[];
 }
 
 interface httpAgent extends http.Agent {
@@ -22,8 +21,7 @@ interface httpsAgent extends https.Agent {
 
 class Axiom implements Axiom {
     constructor(args: axiomArgs) {
-        this.blacklist = args.blacklist;
-        this.whitelist = args.whitelist;
+        this.acl = args.acl;
 
         // @see https://github.com/facebook/flow/issues/7670
         // @ts-expect-error Node.js version compatibility
