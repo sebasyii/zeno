@@ -1,4 +1,4 @@
-import Indirect from './src/idor.js';
-import Axiom from './src/ssrf.js';
+import Indirect from './modules/Indirect/idor.js';
+import Axiom from './modules/Axiom/ssrf.js';
 
 export { Indirect, Axiom };

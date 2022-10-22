@@ -2,8 +2,8 @@
 
 A collection of modules to secure your [express.js](https://github.com/visionmedia/express) application.
 
-- **Indirect**, an Express middleware that prevents [IDOR](https://portswigger.net/web-security/access-control/idor) vulnerabilities by securely converting between internal and external-facing object identifiers.
-- **Axiom**, a customizable SSRF whitelist/blacklist filter.
+- [**Indirect**](./modules/Indirect/), an Express middleware that prevents [IDOR](https://portswigger.net/web-security/access-control/idor) vulnerabilities by securely converting between internal and external-facing object identifiers.
+- [**Axiom**](./modules/Axiom/), an ACL filter that prevents [SSRF](https://portswigger.net/web-security/ssrf) attacks by restricting connections at lookup-time.
 
 ## Installation
 

@@ -20,7 +20,6 @@ interface httpsAgent extends https.Agent {
     createConnection: (options: https.RequestOptions, callback: (err: Error, socket: net.Socket) => void) => net.Socket;
 }
 
-
 class Axiom implements Axiom {
     constructor(args: axiomArgs) {
         this.blacklist = args.blacklist;
