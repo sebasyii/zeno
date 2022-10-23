@@ -4,6 +4,7 @@ import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
 import yaml from 'js-yaml';
+import minimatch from 'minimatch';
 import { isCIDR } from '../utils.js';
 
 interface axiomArgs {
@@ -32,14 +33,23 @@ interface httpsAgent extends https.Agent {
   ) => net.Socket;
 }
 
+class InvalidACLRule extends Error {
+  readonly domain: string;
+
+  constructor(domain: string) {
+    super(`Domain provided ${domain} is an invalid ACL rule`);
+    this.domain = domain;
+  }
+}
+
 class Axiom implements Axiom {
   constructor(args: axiomArgs) {
     this.acl = [];
 
     for (let i = 0; i < args.acl.length; i++) {
-      let match, action, type;
+      let match, type;
 
-      action = args.acl[i].action;
+      const action = args.acl[i].action;
 
       if (isCIDR(args.acl[i].match)) {
         match = ipaddr.parseCIDR(args.acl[i].match);
@@ -49,6 +59,7 @@ class Axiom implements Axiom {
         type = match.kind();
       } else {
         match = args.acl[i].match;
+        if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match);
         type = 'domain';
       }
 
@@ -67,16 +78,23 @@ class Axiom implements Axiom {
     https.globalAgent = this.createCustomAgent(https.globalAgent);
   }
 
-  private checkDomain = (domain: string, match: string) => {
-    if (match.startsWith('*')) {
-      match = match.slice(1);
-      return domain.endsWith(match);
-    }
-    return domain === match;
+  private checkDomain = (domain: string, match: string): boolean => {
+    return minimatch(domain, match);
   };
 
-  private checkACL = (ip: string, domain: string) => {
-    let ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
+  private validateDomainAcl = (domain: string): boolean => {
+    if (!domain.includes('*')) return true;
+    if (domain === '*') return true;
+
+    // There can only be one wildcard, and it must be at the beginning
+    if ((domain.match(/\*/g) || []).length > 1) return false;
+    if (!domain.startsWith('*')) return false;
+    if (domain[1] !== '.') return false;
+    return true;
+  };
+
+  private checkACL = (ip: string, domain: string): boolean => {
+    const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
     for (let i = 0; i < this.acl.length; i++) {
       if (
         this.acl[i].type === 'ipv4' &&
@@ -104,7 +122,9 @@ class Axiom implements Axiom {
     return false;
   };
 
-  public createCustomAgent = (agent: httpAgent | httpsAgent) => {
+  public createCustomAgent = (
+    agent: httpAgent | httpsAgent,
+  ): httpAgent | httpsAgent => {
     const createConnection = agent.createConnection;
     agent.createConnection = (options, callback) => {
       // If an IP address is provided, no lookup is performed.
@@ -129,7 +149,7 @@ class Axiom implements Axiom {
 }
 
 const axiom = (acl: string | Object) => {
-  let args: axiomArgs = { acl: [] };
+  const args: axiomArgs = { acl: [] };
 
   if (typeof acl === 'string') {
     acl = yaml.load(fs.readFileSync(acl, 'utf8')).rules;

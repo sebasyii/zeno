@@ -21,7 +21,7 @@ const v6 = `
 
 const cidrRegex = new RegExp(`^(${v4}|${v6})\\/\\d{1,3}$`);
 
-const isCIDR = (target: string) => {
+const isCIDR = (target: string): boolean => {
   return cidrRegex.test(target) && +target.split('/')[1] <= 128;
 };
 
