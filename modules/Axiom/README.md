@@ -37,7 +37,7 @@ Using Axiom with the default configuration will block all special address blocks
 ```javascript
 const { axiom } = require('zeno');
 
-axiom()
+axiom();
 ```
 
 To configure Axiom with a YAML file, simply provide the filename.
@@ -84,18 +84,16 @@ The following is equivalent to running Axiom with the default configuration.
 ```javascript
 const { axiom } = require('zeno');
 
-axiom(
-    [
-        {
-            match: "special_ranges",
-            action: "deny"
-        },
-        {
-            match: "*",
-            action: "allow"
-        }
-    ]
-)
+axiom([
+  {
+    match: 'special_ranges',
+    action: 'deny',
+  },
+  {
+    match: '*',
+    action: 'allow',
+  },
+]);
 ```
 
 More examples can be found [here](../../examples/ssrf/).
