@@ -46,18 +46,18 @@ class Axiom implements Axiom {
   constructor(args: axiomArgs) {
     this.acl = [];
 
-    for (let i = 0; i < args.acl.length; i++) {
+    for (let acl of args.acl) {
       let match, type;
-      const action = args.acl[i].action;
+      const action = acl.action;
 
-      if (isCIDR(args.acl[i].match)) {
-        match = ipaddr.parseCIDR(args.acl[i].match);
+      if (isCIDR(acl.match)) {
+        match = ipaddr.parseCIDR(acl.match);
         type = match[0].kind();
-      } else if (ipaddr.isValid(args.acl[i].match)) {
-        match = ipaddr.process(args.acl[i].match);
+      } else if (ipaddr.isValid(acl.match)) {
+        match = ipaddr.process(acl.match);
         type = match.kind();
       } else {
-        match = args.acl[i].match;
+        match = acl.match;
         if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match);
         type = 'domain';
       }
