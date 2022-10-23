@@ -11,7 +11,7 @@ By default, Axiom only blocks private IP addresses:
 
 ## ACLs
 
-An access control list (ACL) can be specified in a YAML-formatted file. 
+An access control list (ACL) can be specified in a YAML-formatted file.
 
 - Each host, IP address or CIDR range can be set to either `allow` or `deny`.
 - The ACL is applied from **top to bottom**. The **first match** rule will be applied.
@@ -39,7 +39,7 @@ To configure Axiom with a YAML file, simply provide the filename.
 ```javascript
 const { axiom } = require('zeno');
 
-axiom("./sample_config.yaml")
+axiom('./sample_config.yaml');
 ```
 
 A sample configuration can be found [here](../../examples/ssrf/sample_config.yaml).
@@ -49,30 +49,28 @@ Alternatively, provide the ACL as an array of rules.
 ```javascript
 const { axiom } = require('zeno');
 
-axiom(
-    [
-        {
-            match: "evil.github.com",
-            action: "deny"
-        },
-        {
-            match: "*.github.com",
-            action: "allow"
-        },
-        {
-            match: "2001:db8::/32",
-            action: "deny"
-        },
-        {
-            match: "1.0.0.0/8",
-            action: "deny"
-        },
-        {
-            match: "*",
-            action: "allow"
-        }
-    ]
-)
+axiom([
+  {
+    match: 'evil.github.com',
+    action: 'deny',
+  },
+  {
+    match: '*.github.com',
+    action: 'allow',
+  },
+  {
+    match: '2001:db8::/32',
+    action: 'deny',
+  },
+  {
+    match: '1.0.0.0/8',
+    action: 'deny',
+  },
+  {
+    match: '*',
+    action: 'allow',
+  },
+]);
 ```
 
 More examples can be found [here](../../examples/ssrf/).
