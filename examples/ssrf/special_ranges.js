@@ -6,19 +6,7 @@
     axiom(
         [
             {
-                match: "evil.github.com",
-                action: "deny"
-            },
-            {
-                match: "*.github.com",
-                action: "allow"
-            },
-            {
-                match: "2001:db8::/32",
-                action: "deny"
-            },
-            {
-                match: "1.0.0.0/8",
+                match: "special_ranges",
                 action: "deny"
             },
             {
