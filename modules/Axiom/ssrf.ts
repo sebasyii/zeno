@@ -4,6 +4,7 @@ import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
 import yaml from 'js-yaml';
+import minimatch from 'minimatch';
 import { isCIDR } from '../utils.js';
 
 interface axiomArgs {
@@ -20,6 +21,15 @@ interface httpAgent extends http.Agent {
 
 interface httpsAgent extends https.Agent {
     createConnection: (options: https.RequestOptions, callback: (err: Error, socket: net.Socket) => void) => net.Socket;
+}
+
+class InvalidACLRule extends Error {
+    readonly domain: string
+
+    constructor(domain: string) {
+        super(`Domain provided ${domain} is an invalid ACL rule`)
+        this.domain = domain
+    }
 }
 
 class Axiom implements Axiom {
@@ -58,12 +68,18 @@ class Axiom implements Axiom {
         https.globalAgent = this.createCustomAgent(https.globalAgent);
     }
 
-    private checkDomain = (domain: string, match: string) => {
-        if (match.startsWith('*')) {
-            match = match.slice(1);
-            return domain.endsWith(match);
-        }
-        return domain === match;
+    private checkDomain = (domain: string, match: string): boolean => {
+        if (!this.validateDomainAcl) throw new InvalidACLRule(match)
+        return minimatch(domain, match)
+    }
+
+    private validateDomainAcl = (domain: string): boolean => {
+        if (!domain.includes("*")) return true
+        // Disallow globstar matching
+        if (domain.includes("**")) return false
+        if (!domain.startsWith('*')) return false
+        if (domain[1] !== ".") return false
+        return true
     }
 
     private checkACL = (ip: string, domain: string) => {
