@@ -46,7 +46,7 @@ class Axiom implements Axiom {
   constructor(args: axiomArgs) {
     this.acl = [];
 
-    for (let acl of args.acl) {
+    for (const acl of args.acl) {
       let match, type;
       const action = acl.action;
 
@@ -95,8 +95,8 @@ class Axiom implements Axiom {
     return true;
   };
 
-  private checkACL = (ip: string, domain: string) => {
-    let ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
+  private checkACL = (ip: string, domain: string): boolean => {
+    const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
     for (let i = 0; i < this.acl.length; i++) {
       if (
         (this.acl[i].type === 'special_ranges' &&
