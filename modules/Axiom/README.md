@@ -23,12 +23,15 @@ A host can be specified with or without a globbing **prefix**.
 
 | host                | valid   |
 | ------------------- | ------- |
+| `*`                 | yes     |
 | `example.com`       | yes     |
 | `*.example.com`     | yes     |
 | `api.*.example.com` | no      |
 | `*example.com`      | no      |
 | `ex*ample.com`      | no      |
 | `example.*`         | hell no |
+
+The invalid patterns above are inherently dangerous - domains should only be trusted from higher to lower levels. Trusting any domain starting with `example.` is as good as trusting any arbitrary domain.
 
 ## Example Usage
 
