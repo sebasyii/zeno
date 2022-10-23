@@ -81,7 +81,7 @@ axiom(
 )
 ```
 
-The following is equivalent to running Axios with the default configuration.
+The following is equivalent to running Axiom with the default configuration.
 
 ```javascript
 const { axiom } = require('zeno');
