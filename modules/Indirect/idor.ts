@@ -30,6 +30,7 @@ class Indirect implements Indirect {
   }
 
   public middleware = (model: string) => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     return async (req: ZenoRequest, res: Response, next: NextFunction) => {
       // Exposed method to generate external ID
       req.newExternalID = newExternalID(this.redisClient);
