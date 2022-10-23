@@ -1,4 +1,5 @@
-const v4 = '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}';
+const v4 =
+  '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}';
 
 const v6segment = '[a-fA-F\\d]{1,4}';
 
@@ -13,12 +14,15 @@ const v6 = `
 (?:${v6segment}:){1}(?:(?::${v6segment}){0,4}:${v4}|(?::${v6segment}){1,6}|:)| // 1::              1::3:4:5:6:7:8   1::8            1::3:4:5:6:7:1.2.3.4
 (?::(?:(?::${v6segment}){0,5}:${v4}|(?::${v6segment}){1,7}|:))             // ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8  ::8             ::1.2.3.4
 )(?:%[0-9a-zA-Z]{1,})?                                             // %eth0            %1
-`.replace(/\s*\/\/.*$/gm, '').replace(/\n/g, '').trim();
+`
+  .replace(/\s*\/\/.*$/gm, '')
+  .replace(/\n/g, '')
+  .trim();
 
 const cidrRegex = new RegExp(`^(${v4}|${v6})\\/\\d{1,3}$`);
 
-const isCIDR = (target: string) => {
-    return cidrRegex.test(target) && +target.split('/')[1] <= 128;
-}
+const isCIDR = (target: string): boolean => {
+  return cidrRegex.test(target) && +target.split('/')[1] <= 128;
+};
 
 export { isCIDR };
