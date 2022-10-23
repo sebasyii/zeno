@@ -4,9 +4,7 @@ A collection of modules to secure your [express.js](https://github.com/visionmed
 
 - [**Indirect**](./modules/Indirect/), an [Express](https://github.com/expressjs/express) middleware that prevents [IDOR](https://portswigger.net/web-security/access-control/idor) vulnerabilities by securely converting between internal and external-facing object identifiers.
 - [**Axiom**](./modules/Axiom/), an ACL filter that prevents [SSRF](https://portswigger.net/web-security/ssrf) attacks by restricting connections at lookup-time.
-- [**Regal**](./modules/Regal), a regular expression wrapper that prevents [ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS) through catastrophic backtracking.
-- [**Envy**](./modules/Envy), environemnt variable stuff lol idk
-- [**Cradle**](./modules/Cradle/), a [cross-site websocket hijacking](https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking) filter for the [ws](https://github.com/websockets/ws) library.
+- [**Peg**](./modules/Peg/), an [Express](https://github.com/expressjs/express) middleware and process control system that prevents [application-level DOS](https://www.invicti.com/blog/web-security/application-level-denial-service-guide/) attacks by stopping computationally expensive route handlers after a timeout.
 
 ## Installation
 
