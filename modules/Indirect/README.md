@@ -50,4 +50,4 @@ app.get('/users/:id', indirect.middleware('users'), async (req, res) => {
 });
 ```
 
-Full `docker-compose` example [here](../../examples/idor/)
+Full `docker-compose` example [here](../../examples/indirect/)
