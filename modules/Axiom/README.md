@@ -29,3 +29,50 @@ A host can be specified with or without a globbing **prefix**.
 | `*example.com`      | no      |
 | `ex*ample.com`      | no      |
 | `example.*`         | hell no |
+
+## Example Usage
+
+Upon loading Axiom, it will automatically apply the ACL rules to **all** outgoing HTTP requests. There is no need to manually use Axiom for each request. This helps to prevent accidental misconfigurations and unintentional requests.
+
+To configure Axiom with a YAML file, simply provide the filename.
+
+```javascript
+const { axiom } = require('zeno');
+
+axiom("./sample_config.yaml")
+```
+
+A sample configuration can be found [here](../../examples/ssrf/sample_config.yaml).
+
+Alternatively, provide the ACL as an array of rules.
+
+```javascript
+const { axiom } = require('zeno');
+
+axiom(
+    [
+        {
+            match: "evil.github.com",
+            action: "deny"
+        },
+        {
+            match: "*.github.com",
+            action: "allow"
+        },
+        {
+            match: "2001:db8::/32",
+            action: "deny"
+        },
+        {
+            match: "1.0.0.0/8",
+            action: "deny"
+        },
+        {
+            match: "*",
+            action: "allow"
+        }
+    ]
+)
+```
+
+More examples can be found [here](../../examples/ssrf/).

@@ -1,7 +1,9 @@
+import fs from 'fs';
 import net from 'net';
 import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
+import yaml from 'js-yaml';
 import { isCIDR } from '../utils.js';
 
 interface axiomArgs {
@@ -83,13 +85,13 @@ class Axiom implements Axiom {
     public createCustomAgent = (agent: httpAgent | httpsAgent) => {
         const createConnection = agent.createConnection;
         agent.createConnection = (options, callback) => {
-            
+
             // If an IP address is provided, no lookup is performed.
             const { host: address } = options;
             if (!this.checkACL(address, address)) {
                 throw new Error(`Call to ${address} is blocked.`);
             }
-            
+
             const socket = createConnection.call(agent, options, callback);
 
             // Check IP address at lookup time
@@ -105,4 +107,16 @@ class Axiom implements Axiom {
     }
 }
 
-export default Axiom;
+const axiom = (acl: string | Object) => {
+
+    let args: axiomArgs = { acl: [] };
+
+    if (typeof acl === 'string') {
+        acl = yaml.load(fs.readFileSync(acl, 'utf8')).rules;
+    }
+    args.acl = acl as axiomArgs['acl'];
+    return new Axiom(args);
+}
+
+
+export default axiom;

@@ -1170,13 +1170,6 @@
   "resolved" "https://registry.npmjs.org/ci-info/-/ci-info-3.5.0.tgz"
   "version" "3.5.0"
 
-"cidr-regex@4.0.2":
-  "integrity" "sha512-xvqVyyE8emYjipWVxsA+Vcsbt8TbJJsTHbOeMMA5qsmXUu5VZJzNBGwI4rr1IZ0FQI2z7bfry4NNACP5Cf67CA=="
-  "resolved" "https://registry.npmjs.org/cidr-regex/-/cidr-regex-4.0.2.tgz"
-  "version" "4.0.2"
-  dependencies:
-    "ip-regex" "^5.0.0"
-
 "cjs-module-lexer@^1.0.0":
   "integrity" "sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA=="
   "resolved" "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz"
@@ -1914,11 +1907,6 @@
   "resolved" "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
   "version" "2.0.4"
 
-"ip-regex@^5.0.0":
-  "integrity" "sha512-fOCG6lhoKKakwv+C6KdsOnGvgXnmgfmp0myi3bcNwj3qfwPAxRKWEuFhvEFF7ceYIz6+1jRZ+yguLFAmUNPEfw=="
-  "resolved" "https://registry.npmjs.org/ip-regex/-/ip-regex-5.0.0.tgz"
-  "version" "5.0.0"
-
 "ipaddr.js@^2.0.1":
   "integrity" "sha512-1qTgH9NG+IIJ4yfKs2e6Pp1bZg8wbDbKHT21HrLIeYBTRLgMYKnMTPAuI3Lcs61nfx5h1xlXnbJtH1kX5/d/ng=="
   "resolved" "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-2.0.1.tgz"
@@ -1933,13 +1921,6 @@
   "integrity" "sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg=="
   "resolved" "https://registry.npmjs.org/is-arrayish/-/is-arrayish-0.2.1.tgz"
   "version" "0.2.1"
-
-"is-cidr@^5.0.2":
-  "integrity" "sha512-cCaw4czL00EUoO+mbOt2cUSFq8DQ/3rfWw6foy48TI52+j/tKTtlUet14UnWryHfY9bNbpHLqXkd/jnF600PPQ=="
-  "resolved" "https://registry.npmjs.org/is-cidr/-/is-cidr-5.0.2.tgz"
-  "version" "5.0.2"
-  dependencies:
-    "cidr-regex" "4.0.2"
 
 "is-core-module@^2.9.0":
   "integrity" "sha512-Erxj2n/LDAZ7H8WNJXd9tw38GYM3dv8rk8Zcs+jJuxYTW7sozH+SS8NtrSjVL1/vpLvWi1hxy96IzjJ3EHTJJg=="

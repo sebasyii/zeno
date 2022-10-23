@@ -1,10 +1,10 @@
 (async () => {
 
     const axios = require('axios');
-    const { Axiom } = require('zeno');
+    const { axiom } = require('zeno');
 
-    new Axiom({
-        acl: [
+    axiom(
+        [
             {
                 match: "evil.github.com",
                 action: "deny"
@@ -26,7 +26,7 @@
                 action: "allow"
             }
         ]
-    })
+    )
 
     const urls = [
         "http://example.com/",
