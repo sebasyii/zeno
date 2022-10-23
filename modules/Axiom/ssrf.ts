@@ -50,6 +50,7 @@ class Axiom implements Axiom {
                 type = match.kind();
             } else {
                 match = args.acl[i].match;
+                if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match)
                 type = 'domain';
             }
 
@@ -69,14 +70,15 @@ class Axiom implements Axiom {
     }
 
     private checkDomain = (domain: string, match: string): boolean => {
-        if (!this.validateDomainAcl) throw new InvalidACLRule(match)
         return minimatch(domain, match)
     }
 
     private validateDomainAcl = (domain: string): boolean => {
         if (!domain.includes("*")) return true
-        // Disallow globstar matching
-        if (domain.includes("**")) return false
+        if (domain === "*") return true
+
+        // There can only be one wildcard, and it must be at the beginning
+        if ((domain.match(/\*/g)||[]).length > 1) return false
         if (!domain.startsWith('*')) return false
         if (domain[1] !== ".") return false
         return true
