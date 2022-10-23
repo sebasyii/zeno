@@ -8,13 +8,13 @@ A collection of modules to secure your [express.js](https://github.com/visionmed
 
 ## Installation
 
-```
+```bash
 npm install zeno
 ```
 
 or
 
-```
+```bash
 yarn add zeno
 ```
 
