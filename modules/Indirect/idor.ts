@@ -16,7 +16,7 @@ interface ZenoRequest extends Request {
 }
 
 const newExternalID = (redisClient: RedisClientType) => {
-  return (model: string, internalID: string) => {
+  return (model: string, internalID: string): string => {
     const externalID = randomUUID();
     redisClient.HSET(model, externalID, internalID.toString());
 

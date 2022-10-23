@@ -48,7 +48,6 @@ class Axiom implements Axiom {
 
     for (let i = 0; i < args.acl.length; i++) {
       let match, type;
-
       const action = args.acl[i].action;
 
       if (isCIDR(args.acl[i].match)) {
@@ -148,7 +147,7 @@ class Axiom implements Axiom {
   };
 }
 
-const axiom = (acl: string | Object) => {
+const axiom = (acl: string | axiomArgs['acl']): Axiom => {
   const args: axiomArgs = { acl: [] };
 
   if (typeof acl === 'string') {
