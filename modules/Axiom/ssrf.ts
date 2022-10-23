@@ -1,5 +1,5 @@
 import fs from 'fs';
-import net from 'net';
+import net, { Socket } from 'net';
 import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
@@ -50,7 +50,10 @@ class Axiom implements Axiom {
       let match, type;
       const action = acl.action;
 
-      if (isCIDR(acl.match)) {
+      if (acl.match === 'special_ranges') {
+        match = null;
+        type = 'special_ranges';
+      } else if (isCIDR(acl.match)) {
         match = ipaddr.parseCIDR(acl.match);
         type = match[0].kind();
       } else if (ipaddr.isValid(acl.match)) {
@@ -92,29 +95,25 @@ class Axiom implements Axiom {
     return true;
   };
 
-  private checkACL = (ip: string, domain: string): boolean => {
-    const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
+  private checkACL = (ip: string, domain: string) => {
+    let ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
     for (let i = 0; i < this.acl.length; i++) {
       if (
-        this.acl[i].type === 'ipv4' &&
-        ipAddr &&
-        ipAddr.kind() === 'ipv4' &&
-        ipAddr.match(this.acl[i].match as [ipaddr.IPv4, number])
-      ) {
+        (this.acl[i].type === 'special_ranges' &&
+          ipAddr &&
+          ipAddr.range() !== 'unicast') ||
+        (this.acl[i].type === 'ipv4' &&
+          ipAddr &&
+          ipAddr.kind() === 'ipv4' &&
+          ipAddr.match(this.acl[i].match as [ipaddr.IPv4, number])) ||
+        (this.acl[i].type === 'ipv6' &&
+          ipAddr &&
+          ipAddr.kind() === 'ipv6' &&
+          ipAddr.match(this.acl[i].match as [ipaddr.IPv6, number])) ||
+        (this.acl[i].type === 'domain' &&
+          this.checkDomain(domain, this.acl[i].match as string))
+      )
         return this.acl[i].action === 'allow';
-      } else if (
-        this.acl[i].type === 'ipv6' &&
-        ipAddr &&
-        ipAddr.kind() === 'ipv6' &&
-        ipAddr.match(this.acl[i].match as [ipaddr.IPv6, number])
-      ) {
-        return this.acl[i].action === 'allow';
-      } else if (
-        this.acl[i].type === 'domain' &&
-        this.checkDomain(domain, this.acl[i].match as string)
-      ) {
-        return this.acl[i].action === 'allow';
-      }
     }
 
     // default deny
@@ -125,7 +124,7 @@ class Axiom implements Axiom {
     agent: httpAgent | httpsAgent,
   ): httpAgent | httpsAgent => {
     const createConnection = agent.createConnection;
-    agent.createConnection = (options, callback) => {
+    agent.createConnection = (options, callback): Socket => {
       // If an IP address is provided, no lookup is performed.
       const { host: address } = options;
       if (!this.checkACL(address, address)) {
@@ -150,7 +149,13 @@ class Axiom implements Axiom {
 const axiom = (acl: string | axiomArgs['acl']): Axiom => {
   const args: axiomArgs = { acl: [] };
 
-  if (typeof acl === 'string') {
+  if (typeof acl === 'undefined') {
+    // Block all special address blocks by default
+    acl = [
+      { match: 'special_ranges', action: 'deny' },
+      { match: '*', action: 'allow' },
+    ];
+  } else if (typeof acl === 'string') {
     acl = yaml.load(fs.readFileSync(acl, 'utf8')).rules;
   }
   args.acl = acl as axiomArgs['acl'];
