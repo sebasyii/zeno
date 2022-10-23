@@ -22,7 +22,7 @@ const newExternalID = (redisClient: RedisClientType) => {
 
     return externalID;
   };
-}
+};
 
 class Indirect implements Indirect {
   constructor(args: IndirectArgs) {
@@ -30,19 +30,15 @@ class Indirect implements Indirect {
   }
 
   public middleware = (model: string) => {
-
     return async (req: ZenoRequest, res: Response, next: NextFunction) => {
-
       // Exposed method to generate external ID
       req.newExternalID = newExternalID(this.redisClient);
 
-      if (model === undefined)
-        return next();
+      if (model === undefined) return next();
 
       // Convert external IDs to internal IDs
       for (const item of ['params', 'query', 'body']) {
         for (const key in req[item]) {
-
           const value = req[item][key];
 
           if (value.length === 36) {
