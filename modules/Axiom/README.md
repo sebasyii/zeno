@@ -6,7 +6,7 @@ By default, Axiom will block all [special address blocks](https://en.wikipedia.o
 
 ## ACLs
 
-An access control list (ACL) can be specified in a YAML-formatted file. 
+An access control list (ACL) can be specified in a YAML-formatted file.
 
 - Each host, IP address or CIDR range can be set to either `allow` or `deny`.
 - The ACL is applied from **top to bottom**. The **first match** rule will be applied.
@@ -37,7 +37,7 @@ Using Axiom with the default configuration will block all special address blocks
 ```javascript
 const { axiom } = require('zeno');
 
-axiom()
+axiom();
 ```
 
 To configure Axiom with a YAML file, simply provide the filename.
@@ -45,7 +45,7 @@ To configure Axiom with a YAML file, simply provide the filename.
 ```javascript
 const { axiom } = require('zeno');
 
-axiom("./sample_config.yaml")
+axiom('./sample_config.yaml');
 ```
 
 A sample configuration can be found [here](../../examples/ssrf/sample_config.yaml).
@@ -55,30 +55,28 @@ Alternatively, provide the ACL as an array of rules.
 ```javascript
 const { axiom } = require('zeno');
 
-axiom(
-    [
-        {
-            match: "evil.github.com",
-            action: "deny"
-        },
-        {
-            match: "*.github.com",
-            action: "allow"
-        },
-        {
-            match: "2001:db8::/32",
-            action: "deny"
-        },
-        {
-            match: "1.0.0.0/8",
-            action: "deny"
-        },
-        {
-            match: "*",
-            action: "allow"
-        }
-    ]
-)
+axiom([
+  {
+    match: 'evil.github.com',
+    action: 'deny',
+  },
+  {
+    match: '*.github.com',
+    action: 'allow',
+  },
+  {
+    match: '2001:db8::/32',
+    action: 'deny',
+  },
+  {
+    match: '1.0.0.0/8',
+    action: 'deny',
+  },
+  {
+    match: '*',
+    action: 'allow',
+  },
+]);
 ```
 
 The following is equivalent to running Axiom with the default configuration.
@@ -86,18 +84,16 @@ The following is equivalent to running Axiom with the default configuration.
 ```javascript
 const { axiom } = require('zeno');
 
-axiom(
-    [
-        {
-            match: "special_ranges",
-            action: "deny"
-        },
-        {
-            match: "*",
-            action: "allow"
-        }
-    ]
-)
+axiom([
+  {
+    match: 'special_ranges',
+    action: 'deny',
+  },
+  {
+    match: '*',
+    action: 'allow',
+  },
+]);
 ```
 
 More examples can be found [here](../../examples/ssrf/).

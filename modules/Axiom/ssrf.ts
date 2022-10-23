@@ -46,22 +46,21 @@ class Axiom implements Axiom {
   constructor(args: axiomArgs) {
     this.acl = [];
 
-    for (let i = 0; i < args.acl.length; i++) {
+    for (const acl of args.acl) {
       let match, type;
+      const action = acl.action;
 
-      const action = args.acl[i].action;
-
-      if (args.acl[i].match === 'special_ranges') {
+      if (acl.match === 'special_ranges') {
         match = null;
         type = 'special_ranges';
-      } else if (isCIDR(args.acl[i].match)) {
-        match = ipaddr.parseCIDR(args.acl[i].match);
+      } else if (isCIDR(acl.match)) {
+        match = ipaddr.parseCIDR(acl.match);
         type = match[0].kind();
-      } else if (ipaddr.isValid(args.acl[i].match)) {
-        match = ipaddr.process(args.acl[i].match);
+      } else if (ipaddr.isValid(acl.match)) {
+        match = ipaddr.process(acl.match);
         type = match.kind();
       } else {
-        match = args.acl[i].match;
+        match = acl.match;
         if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match);
         type = 'domain';
       }
@@ -96,8 +95,8 @@ class Axiom implements Axiom {
     return true;
   };
 
-  private checkACL = (ip: string, domain: string) => {
-    let ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
+  private checkACL = (ip: string, domain: string): boolean => {
+    const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
     for (let i = 0; i < this.acl.length; i++) {
       if (
         (this.acl[i].type === 'special_ranges' &&
@@ -147,10 +146,9 @@ class Axiom implements Axiom {
   };
 }
 
-const axiom = (acl: string | unknown): Axiom => {
+const axiom = (acl: string | axiomArgs['acl']): Axiom => {
   const args: axiomArgs = { acl: [] };
 
-  let args: axiomArgs = { acl: [] };
   if (typeof acl === 'undefined') {
     // Block all special address blocks by default
     acl = [
