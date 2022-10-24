@@ -37,7 +37,7 @@ interface httpsAgent extends https.Agent {
   ) => net.Socket;
 }
 
-class InvalidACLRule extends Error {
+export class InvalidACLRule extends Error {
   readonly domain: string;
 
   constructor(domain: string) {

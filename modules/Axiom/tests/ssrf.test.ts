@@ -1,15 +1,16 @@
 import { axiom } from '../../../';
+import { InvalidACLRule } from '../ssrf'
 
-describe('Axiom', () => {
+describe('#validateDomainAcl', () => {
   const ax = axiom([]);
 
-  it('#validateDomainAcl - valid domains', () => {
+  it('valid domains', () => {
     expect(ax['validateDomainAcl']('*')).toBe(true);
     expect(ax['validateDomainAcl']('example.com')).toBe(true);
     expect(ax['validateDomainAcl']('*.example.com')).toBe(true);
   });
 
-  it('#validateDomainAcl - invalid domains', () => {
+  it('invalid domains', () => {
     expect(ax['validateDomainAcl']('**.example.com')).toBe(false);
     expect(ax['validateDomainAcl']('example.*.com')).toBe(false);
     expect(ax['validateDomainAcl']('*.api.*.com')).toBe(false);
@@ -18,3 +19,13 @@ describe('Axiom', () => {
     expect(ax['validateDomainAcl']('example.*')).toBe(false);
   });
 });
+
+describe('#InvalidACLRule', () => {
+  const badAxiomConstructor = () => {
+    axiom([{ match: 'example.*', action: 'allow' }])
+  }
+
+  it('invalid ACL rules', () => {
+    expect(badAxiomConstructor).toThrowError(new InvalidACLRule("example.*"))
+  })
+})
