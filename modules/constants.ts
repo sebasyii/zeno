@@ -23,7 +23,12 @@ const V6_REGEX = `
   .replace(/\n/g, '')
   .trim();
 
-const CIDR_REGEX = `^(${V4_REGEX}|${V6_REGEX})\\/\\d{1,3}$`;
+// Combine IPv4 and back regex
+
+const IPV4_CIDR_REGEX = `^${V4_REGEX}(\\/([0-9]|[1-2][0-9]|3[0-2]))$`;
+const IPV6_CIDR_REGEX = `^${V6_REGEX}$`;
+
+// const CIDR_REGEX = `^(${V4_REGEX}|${V6_REGEX})\\/\\d{1,3}$`;
 
 // IPv4 and IPv6 special ranges
 
@@ -81,4 +86,10 @@ const IPV6_SPECIAL_RANGES = {
   orchid2: [new IPv6([0x2001, 0x20, 0, 0, 0, 0, 0, 0]), 28],
 };
 
-export { CIDR_REGEX, IPV4_SPECIAL_RANGES, IPV6_SPECIAL_RANGES };
+export {
+  V4_REGEX,
+  IPV4_CIDR_REGEX,
+  IPV6_CIDR_REGEX,
+  IPV4_SPECIAL_RANGES,
+  IPV6_SPECIAL_RANGES,
+};
