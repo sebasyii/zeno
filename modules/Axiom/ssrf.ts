@@ -83,11 +83,16 @@ class Axiom implements Axiom {
     }
 
     // @see https://github.com/facebook/flow/issues/7670
-    // @ts-expect-error Node.js version compatibility
-    http.globalAgent = this.createCustomAgent(http.globalAgent);
 
-    // @ts-expect-error Node.js version compatibility
-    https.globalAgent = this.createCustomAgent(https.globalAgent);
+    if (http && http.globalAgent) {
+      // @ts-expect-error Node.js version compatibility
+      http.globalAgent = this.createCustomAgent(http.globalAgent);
+    }
+
+    if (https && https.globalAgent) {
+      // @ts-expect-error Node.js version compatibility
+      https.globalAgent = this.createCustomAgent(https.globalAgent);
+    }
   }
 
   private checkDomain = (domain: string, match: string): boolean => {
@@ -132,25 +137,29 @@ class Axiom implements Axiom {
   public createCustomAgent = (
     agent: httpAgent | httpsAgent,
   ): httpAgent | httpsAgent => {
-    const createConnection = agent.createConnection;
-    agent.createConnection = (options, callback): Socket => {
-      // If an IP address is provided, no lookup is performed.
-      const { host: address } = options;
-      if (!this.checkACL(address, address)) {
-        throw new Error(`Call to ${address} is blocked.`);
-      }
+    const createConnection = agent?.createConnection;
 
-      const socket = createConnection.call(agent, options, callback);
-
-      // Check IP address at lookup time
-      socket.on('lookup', (error, address, family, host) => {
-        if (error || this.checkACL(address, host)) {
-          return false;
+    if (agent && agent.createConnection) {
+      agent.createConnection = (options, callback): Socket => {
+        // If an IP address is provided, no lookup is performed.
+        const { host: address } = options;
+        if (!this.checkACL(address, address)) {
+          throw new Error(`Call to ${address} is blocked.`);
         }
-        return socket.destroy(new Error(`Call to ${host} is blocked.`));
-      });
-      return socket;
-    };
+
+        const socket = createConnection.call(agent, options, callback);
+
+        // Check IP address at lookup time
+        socket.on('lookup', (error, address, family, host) => {
+          if (error || this.checkACL(address, host)) {
+            return false;
+          }
+          return socket.destroy(new Error(`Call to ${host} is blocked.`));
+        });
+        return socket;
+      };
+    }
+
     return agent;
   };
 }
