@@ -22,10 +22,10 @@ const { peg } = require('zeno');
 
 const app = express();
 
-app.get('/', peg.timeout(1000, (req, res) => {
+app.get('/', peg.timeout(1000), (req, res) => {
     doStuff();
     res.send('Stuff has been done.');
-}));
+});
 
 peg.listen(app, 8000);
 ```
