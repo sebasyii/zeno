@@ -21,8 +21,6 @@ app.get('/', peg.timeout(1000, (req, res) => {
     doStuff();
     res.send('Stuff has been done.');
 }));
-
-module.exports = { doStuff }
 ```
 
 ### Synchronous Tasks
