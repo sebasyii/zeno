@@ -92,3 +92,5 @@ app.get('/async-3', peg.timeout(1000), async (req, res) => {
 ```
 
 Further reading: [JavaScript Event Loop And Call Stack Explained](https://felixgerschau.com/javascript-event-loop-call-stack/).
+
+More examples [here](../../examples/peg/).
