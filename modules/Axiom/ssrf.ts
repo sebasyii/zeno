@@ -13,7 +13,11 @@ interface axiomArgs {
 
 interface Axiom {
   acl: {
-    match: string | ipaddr.IPv4 | ipaddr.IPv6 | [ipaddr.IPv4 | ipaddr.IPv6, number];
+    match:
+      | string
+      | ipaddr.IPv4
+      | ipaddr.IPv6
+      | [ipaddr.IPv4 | ipaddr.IPv6, number];
     action: string;
     type: string;
   }[];
@@ -47,7 +51,13 @@ class Axiom implements Axiom {
     this.acl = [];
 
     for (const acl of args.acl) {
-      let match: string | ipaddr.IPv4 | ipaddr.IPv6 | [ipaddr.IPv4 | ipaddr.IPv6, number] | null, type: string;
+      let match:
+          | string
+          | ipaddr.IPv4
+          | ipaddr.IPv6
+          | [ipaddr.IPv4 | ipaddr.IPv6, number]
+          | null,
+        type: string;
       const action = acl.action;
 
       if (acl.match === 'special_ranges') {
@@ -110,8 +120,7 @@ class Axiom implements Axiom {
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
           ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
-        (acl.type === 'domain' &&
-          this.checkDomain(domain, acl.match as string))
+        (acl.type === 'domain' && this.checkDomain(domain, acl.match as string))
       )
         return acl.action === 'allow';
     }
