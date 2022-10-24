@@ -7,6 +7,7 @@ A collection of modules to secure your [express.js](https://github.com/visionmed
 - [**Regal**](./modules/Regal), a regular expression wrapper that prevents [ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS) through catastrophic backtracking.
 - [**Envy**](./modules/Envy), environemnt variable stuff lol idk
 - [**Cradle**](./modules/Cradle/), a [cross-site websocket hijacking](https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking) filter for the [ws](https://github.com/websockets/ws) library.
+- [**Euler**](./modules/Euler/), Just some limits stuff
 
 ## Installation
 
