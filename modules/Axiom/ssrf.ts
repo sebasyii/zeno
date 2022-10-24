@@ -13,7 +13,7 @@ interface axiomArgs {
 
 interface Axiom {
   acl: {
-    match: string | [ipaddr.IPv4 | ipaddr.IPv6, number];
+    match: string | ipaddr.IPv4 | ipaddr.IPv6 | [ipaddr.IPv4 | ipaddr.IPv6, number];
     action: string;
     type: string;
   }[];
@@ -47,7 +47,7 @@ class Axiom implements Axiom {
     this.acl = [];
 
     for (const acl of args.acl) {
-      let match, type;
+      let match: string | ipaddr.IPv4 | ipaddr.IPv6 | [ipaddr.IPv4 | ipaddr.IPv6, number] | null, type: string;
       const action = acl.action;
 
       if (acl.match === 'special_ranges') {
@@ -97,23 +97,23 @@ class Axiom implements Axiom {
 
   private checkACL = (ip: string, domain: string): boolean => {
     const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
-    for (let i = 0; i < this.acl.length; i++) {
+    for (const acl of this.acl) {
       if (
-        (this.acl[i].type === 'special_ranges' &&
+        (acl.type === 'special_ranges' &&
           ipAddr &&
           ipAddr.range() !== 'unicast') ||
-        (this.acl[i].type === 'ipv4' &&
+        (acl.type === 'ipv4' &&
           ipAddr &&
           ipAddr.kind() === 'ipv4' &&
-          ipAddr.match(this.acl[i].match as [ipaddr.IPv4, number])) ||
-        (this.acl[i].type === 'ipv6' &&
+          ipAddr.match(acl.match as [ipaddr.IPv4, number])) ||
+        (acl.type === 'ipv6' &&
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
-          ipAddr.match(this.acl[i].match as [ipaddr.IPv6, number])) ||
-        (this.acl[i].type === 'domain' &&
-          this.checkDomain(domain, this.acl[i].match as string))
+          ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
+        (acl.type === 'domain' &&
+          this.checkDomain(domain, acl.match as string))
       )
-        return this.acl[i].action === 'allow';
+        return acl.action === 'allow';
     }
 
     // default deny
