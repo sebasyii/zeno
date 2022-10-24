@@ -2,8 +2,10 @@ import { IPv4, IPv6 } from 'ipaddr.js';
 
 // IPv4, IPv6 and CIDR regex
 
-const V4_REGEX =
-  '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}';
+// const V4_REGEX =
+//   '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}';
+
+const V4_REGEX = '((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d).?\\b){4}';
 
 const V6_SEGMENT_REGEX = '[a-fA-F\\d]{1,4}';
 
@@ -26,7 +28,7 @@ const V6_REGEX = `
 // Combine IPv4 and back regex
 
 const IPV4_CIDR_REGEX = `^${V4_REGEX}(\\/([0-9]|[1-2][0-9]|3[0-2]))$`;
-const IPV6_CIDR_REGEX = `^${V6_REGEX}$`;
+const IPV6_CIDR_REGEX = `^${V6_REGEX}(\\d|[1-9]\\d|1[01]\\d|12[0-8])$`;
 
 // const CIDR_REGEX = `^(${V4_REGEX}|${V6_REGEX})\\/\\d{1,3}$`;
 
@@ -88,6 +90,7 @@ const IPV6_SPECIAL_RANGES = {
 
 export {
   V4_REGEX,
+  V6_REGEX,
   IPV4_CIDR_REGEX,
   IPV6_CIDR_REGEX,
   IPV4_SPECIAL_RANGES,
