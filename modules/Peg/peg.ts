@@ -1,10 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { Application, NextFunction, Request, Response } from "express";
+import { createContext, runInContext } from "vm";
 
 const cluster = require('cluster');
 const { Request, Response, NextFunction } = require('express');
 const cCPUs = require('os').cpus().length;
 
-const listen = (app, port) => {
+const listen = (app: Application, port: number) => {
 
     if (cluster.isMaster) {
         // Create a worker for each CPU
@@ -27,12 +28,36 @@ const listen = (app, port) => {
 const timeout = (ms: number) => {
 
     return (req: Request, res: Response, next: NextFunction) => {
+
+        // https://nodejs.org/api/vm.html#timeout-interactions-with-asynchronous-tasks-and-promises
+        // Deal with the global task queues
+
         setTimeout(() => {
+            if (res.headersSent) {
+                return;
+            }
             res.sendStatus(504);
             process.exit();
         }, ms);
 
-        next();
+        const cloneGlobal = () => Object.defineProperties(
+            { ...global },
+            Object.getOwnPropertyDescriptors(global)
+        )
+
+        const context = createContext({ req, res, next, ...cloneGlobal() }, { microtaskMode: 'afterEvaluate' });
+
+        try {
+            runInContext(`next()`, context, { timeout: ms });
+        } catch (err) {
+            if (err.code !== 'ERR_SCRIPT_EXECUTION_TIMEOUT') {
+                throw err;
+            }
+            if (res.headersSent) {
+                return;
+            }
+            res.sendStatus(504);
+        }
     };
 };
 
