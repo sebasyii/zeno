@@ -32,7 +32,7 @@ peg.listen(app, 8000);
 
 ### Synchronous Tasks
 
-The case of synchronous tasks is more straightforward. After the given timeout of 1000ms, the VM halts execution, and a 504 Gateway Timeout is returned to the client.
+The case of synchronous tasks is more straightforward. After the given timeout, the VM halts execution, and a 504 Gateway Timeout is returned to the client.
 
 ```javascript
 const loop = () => {
@@ -41,7 +41,7 @@ const loop = () => {
 
 app.use(peg.timeout(1000));
 
-app.get('/', (req, res) => {
+app.get('/sync', peg.timeout(1000), (req, res) => {
     loop();
     res.send('This should never be reached');
 });
