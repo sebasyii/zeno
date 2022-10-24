@@ -139,7 +139,7 @@ class Axiom implements Axiom {
   ): httpAgent | httpsAgent => {
     const createConnection = agent?.createConnection;
 
-    if (agent && agent.createConnection) {
+    if (createConnection) {
       agent.createConnection = (options, callback): Socket => {
         // If an IP address is provided, no lookup is performed.
         const { host: address } = options;
