@@ -17,10 +17,17 @@ When running `peg.listen(app: Application, port: number)`, Peg starts a cluster 
 Peg will run the route handler in a new [VM](https://nodejs.org/api/vm.html#vm-executing-javascript) context.
 
 ```javascript
+const express = require('express');
+const { peg } = require('zeno');
+
+const app = express();
+
 app.get('/', peg.timeout(1000, (req, res) => {
     doStuff();
     res.send('Stuff has been done.');
 }));
+
+peg.listen(app, 8000);
 ```
 
 ### Synchronous Tasks
