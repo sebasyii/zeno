@@ -4,7 +4,7 @@ Prevents [application-level DOS](https://www.invicti.com/blog/web-security/appli
 
 ## The Problem
 
-Application-level DOS attacks like Regular Expression Denial of Service (ReDoS) can hog process memory and CPU. Given the sheer number of ReDoS issues added to the CVE database every now and then, it is evedent that such vulnerabilities are a common occurrence. Other examples include SQL wildcard attacks, password hashing issues, and headless browser abuse.
+Application-level DOS attacks like Regular Expression Denial of Service (ReDoS) can hog process memory and CPU. Given the sheer number of ReDoS issues added to the CVE database every now and then, it is evident that such vulnerabilities are a common occurrence. Other examples include SQL wildcard attacks, password hashing issues, and headless browser abuse.
 
 One approach to harden a server against such attacks would be to kill computationally expensive tasks after a given timeout. One might use the [Express timeout middleware](https://expressjs.com/en/resources/middleware/timeout.html) to respond with a timeout error after a given timeout. However, this does not stop the actual route handler, allowing the requests to continue hogging CPU resources indefinitely.
 
