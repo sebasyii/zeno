@@ -23,8 +23,8 @@ const { peg } = require('zeno');
 const app = express();
 
 app.get('/', peg.timeout(1000), (req, res) => {
-    doStuff();
-    res.send('Stuff has been done.');
+  doStuff();
+  res.send('Stuff has been done.');
 });
 
 peg.listen(app, 8000);
@@ -36,14 +36,14 @@ The case of synchronous tasks is more straightforward. After the given timeout, 
 
 ```javascript
 const loop = () => {
-    while (1) console.log(Date.now());
-}
+  while (1) console.log(Date.now());
+};
 
 app.use(peg.timeout(1000));
 
 app.get('/sync', peg.timeout(1000), (req, res) => {
-    loop();
-    res.send('This should never be reached');
+  loop();
+  res.send('This should never be reached');
 });
 ```
 
@@ -55,12 +55,12 @@ The following routes will both respond with a 504 Gateway Timeout.
 
 ```javascript
 app.get('/async-1', peg.timeout(1000), async (req, res) => {
-    const result = await mysqlQuery('SELECT SLEEP(2);');
-    res.send('This should never be reached');
+  const result = await mysqlQuery('SELECT SLEEP(2);');
+  res.send('This should never be reached');
 });
 
 app.get('/async-2', peg.timeout(1000), (req, res) => {
-    setTimeout(() => res.send('This should never be reached'), 2000);
+  setTimeout(() => res.send('This should never be reached'), 2000);
 });
 ```
 
@@ -81,13 +81,13 @@ In this example, Peg will never get the chance to kill the task becasue the loop
 
 ```javascript
 const loop = () => {
-    while (1) console.log(Date.now());
-}
+  while (1) console.log(Date.now());
+};
 
 // This task will not be killed
 app.get('/async-3', peg.timeout(1000), async (req, res) => {
-    await Promise.resolve().then(loop);
-    res.send('This should never be reached');
+  await Promise.resolve().then(loop);
+  res.send('This should never be reached');
 });
 ```
 
