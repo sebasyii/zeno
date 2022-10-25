@@ -1,5 +1,5 @@
 import { axiom } from '../../../';
-import { InvalidACLRule } from '../ssrf';
+import { InvalidACLRule } from '../axiom';
 
 describe('#validateDomainAcl', () => {
   const ax = axiom([]);
@@ -26,6 +26,6 @@ describe('#InvalidACLRule', () => {
   };
 
   it('invalid ACL rules', () => {
-    expect(badAxiomConstructor).toThrowError(new InvalidACLRule('example.*'));
+    expect(badAxiomConstructor).toThrow(new InvalidACLRule('example.*'));
   });
 });
