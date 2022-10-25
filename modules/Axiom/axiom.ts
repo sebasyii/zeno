@@ -13,7 +13,11 @@ interface axiomArgs {
 
 interface Axiom {
   acl: {
-    match: string | [ipaddr.IPv4 | ipaddr.IPv6, number];
+    match:
+      | string
+      | ipaddr.IPv4
+      | ipaddr.IPv6
+      | [ipaddr.IPv4 | ipaddr.IPv6, number];
     action: string;
     type: string;
   }[];
@@ -33,7 +37,7 @@ interface httpsAgent extends https.Agent {
   ) => net.Socket;
 }
 
-class InvalidACLRule extends Error {
+export class InvalidACLRule extends Error {
   readonly domain: string;
 
   constructor(domain: string) {
@@ -47,7 +51,13 @@ class Axiom implements Axiom {
     this.acl = [];
 
     for (const acl of args.acl) {
-      let match, type;
+      let match:
+          | string
+          | ipaddr.IPv4
+          | ipaddr.IPv6
+          | [ipaddr.IPv4 | ipaddr.IPv6, number]
+          | null,
+        type: string;
       const action = acl.action;
 
       if (acl.match === 'special_ranges') {
@@ -73,11 +83,16 @@ class Axiom implements Axiom {
     }
 
     // @see https://github.com/facebook/flow/issues/7670
-    // @ts-expect-error Node.js version compatibility
-    http.globalAgent = this.createCustomAgent(http.globalAgent);
 
-    // @ts-expect-error Node.js version compatibility
-    https.globalAgent = this.createCustomAgent(https.globalAgent);
+    if (http && http.globalAgent) {
+      // @ts-expect-error Node.js version compatibility
+      http.globalAgent = this.createCustomAgent(http.globalAgent);
+    }
+
+    if (https && https.globalAgent) {
+      // @ts-expect-error Node.js version compatibility
+      https.globalAgent = this.createCustomAgent(https.globalAgent);
+    }
   }
 
   private checkDomain = (domain: string, match: string): boolean => {
@@ -97,23 +112,22 @@ class Axiom implements Axiom {
 
   private checkACL = (ip: string, domain: string): boolean => {
     const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
-    for (let i = 0; i < this.acl.length; i++) {
+    for (const acl of this.acl) {
       if (
-        (this.acl[i].type === 'special_ranges' &&
+        (acl.type === 'special_ranges' &&
           ipAddr &&
           ipAddr.range() !== 'unicast') ||
-        (this.acl[i].type === 'ipv4' &&
+        (acl.type === 'ipv4' &&
           ipAddr &&
           ipAddr.kind() === 'ipv4' &&
-          ipAddr.match(this.acl[i].match as [ipaddr.IPv4, number])) ||
-        (this.acl[i].type === 'ipv6' &&
+          ipAddr.match(acl.match as [ipaddr.IPv4, number])) ||
+        (acl.type === 'ipv6' &&
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
-          ipAddr.match(this.acl[i].match as [ipaddr.IPv6, number])) ||
-        (this.acl[i].type === 'domain' &&
-          this.checkDomain(domain, this.acl[i].match as string))
+          ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
+        (acl.type === 'domain' && this.checkDomain(domain, acl.match as string))
       )
-        return this.acl[i].action === 'allow';
+        return acl.action === 'allow';
     }
 
     // default deny
@@ -123,25 +137,29 @@ class Axiom implements Axiom {
   public createCustomAgent = (
     agent: httpAgent | httpsAgent,
   ): httpAgent | httpsAgent => {
-    const createConnection = agent.createConnection;
-    agent.createConnection = (options, callback): Socket => {
-      // If an IP address is provided, no lookup is performed.
-      const { host: address } = options;
-      if (!this.checkACL(address, address)) {
-        throw new Error(`Call to ${address} is blocked.`);
-      }
+    const createConnection = agent?.createConnection;
 
-      const socket = createConnection.call(agent, options, callback);
-
-      // Check IP address at lookup time
-      socket.on('lookup', (error, address, family, host) => {
-        if (error || this.checkACL(address, host)) {
-          return false;
+    if (createConnection) {
+      agent.createConnection = (options, callback): Socket => {
+        // If an IP address is provided, no lookup is performed.
+        const { host: address } = options;
+        if (!this.checkACL(address, address)) {
+          throw new Error(`Call to ${address} is blocked.`);
         }
-        return socket.destroy(new Error(`Call to ${host} is blocked.`));
-      });
-      return socket;
-    };
+
+        const socket = createConnection.call(agent, options, callback);
+
+        // Check IP address at lookup time
+        socket.on('lookup', (error, address, family, host) => {
+          if (error || this.checkACL(address, host)) {
+            return false;
+          }
+          return socket.destroy(new Error(`Call to ${host} is blocked.`));
+        });
+        return socket;
+      };
+    }
+
     return agent;
   };
 }

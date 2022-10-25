@@ -39,9 +39,8 @@ class Indirect implements Indirect {
 
       // Convert external IDs to internal IDs
       for (const item of ['params', 'query', 'body']) {
-        for (const key in req[item]) {
-          const value = req[item][key];
-
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const [key, value] of Object.entries(req[item]) as [string, any]) {
           if (value.length === 36) {
             const internalID = await this.redisClient.HGET(model, value);
 
