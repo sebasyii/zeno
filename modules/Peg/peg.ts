@@ -12,7 +12,7 @@ const listen = (app: Application, port: number): void => {
       cluster.fork();
     }
     cluster.on('online', function (worker) {
-      console.log(`Worker ${worker.process.pid} is online.`)
+      console.log(`Worker ${worker.process.pid} is online.`);
     });
     cluster.on('exit', function (worker, _code, _signal) {
       // Automatically respawn the worker if it dies
