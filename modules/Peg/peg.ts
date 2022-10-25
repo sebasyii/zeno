@@ -1,22 +1,22 @@
 import { Application, NextFunction, Request, Response } from 'express';
 import { createContext, runInContext } from 'vm';
+import cluster from 'cluster';
+import { cpus } from 'os';
 
-const cluster = require('cluster');
-const { Request, Response, NextFunction } = require('express');
-const cCPUs = require('os').cpus().length;
+const cCPUs = cpus().length;
 
-const listen = (app: Application, port: number) => {
-  if (cluster.isMaster) {
+const listen = (app: Application, port: number): void => {
+  if (cluster.isPrimary) {
     // Create a worker for each CPU
     for (let i = 0; i < cCPUs; i++) {
       cluster.fork();
     }
     cluster.on('online', function (worker) {
-      console.log('Worker ' + worker.process.pid + ' is online.');
+      console.log(`Worker ${worker.process.pid} is online.`)
     });
-    cluster.on('exit', function (worker, code, signal) {
+    cluster.on('exit', function (worker, _code, _signal) {
       // Automatically respawn the worker if it dies
-      console.log('Worker ' + worker.process.pid + ' died.');
+      console.log(`Worker ${worker.process.pid} died.`);
       cluster.fork();
     });
   } else {
@@ -25,6 +25,7 @@ const listen = (app: Application, port: number) => {
 };
 
 const timeout = (ms: number) => {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   return (req: Request, res: Response, next: NextFunction) => {
     // https://nodejs.org/api/vm.html#timeout-interactions-with-asynchronous-tasks-and-promises
     // Deal with the global task queues
@@ -37,6 +38,7 @@ const timeout = (ms: number) => {
       process.exit();
     }, ms);
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const cloneGlobal = () =>
       Object.defineProperties(
         { ...global },

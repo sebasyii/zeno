@@ -21,6 +21,7 @@ describe('#validateDomainAcl', () => {
 });
 
 describe('#InvalidACLRule', () => {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const badAxiomConstructor = () => {
     axiom([{ match: 'example.*', action: 'allow' }]);
   };
