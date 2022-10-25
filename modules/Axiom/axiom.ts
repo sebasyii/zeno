@@ -37,7 +37,7 @@ interface httpsAgent extends https.Agent {
   ) => net.Socket;
 }
 
-class InvalidACLRule extends Error {
+export class InvalidACLRule extends Error {
   readonly domain: string;
 
   constructor(domain: string) {
@@ -66,7 +66,7 @@ class Axiom implements Axiom {
       } else if (isCIDR(acl.match)) {
         match = ipaddr.parseCIDR(acl.match);
         type = match[0].kind();
-      } else if (ipaddr.isValid(acl.match)) {
+      } else if (ipaddr && ipaddr.isValid(acl.match)) {
         match = ipaddr.process(acl.match);
         type = match.kind();
       } else {

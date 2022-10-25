@@ -17,6 +17,7 @@ const config: Config = {
     '!src/**/*.d.ts',
     '!src/**/*.d.mts',
   ],
+  testPathIgnorePatterns: ['build'],
 };
 
 export default config;

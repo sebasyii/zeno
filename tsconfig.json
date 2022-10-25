@@ -19,5 +19,6 @@
     "noImplicitThis": false,
     "strictNullChecks": false
   },
-  "include": ["modules/**/*", "__tests__/**/*", "index.ts", "jest.config.ts"]
+  "include": ["modules/**/*", "__tests__/**/*", "index.ts", "jest.config.ts"],
+  "exclude": ["examples"]
 }
