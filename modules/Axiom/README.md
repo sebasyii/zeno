@@ -96,4 +96,4 @@ axiom([
 ]);
 ```
 
-More examples can be found [here](../../examples/ssrf/).
+More examples can be found [here](../../examples/axiom/).

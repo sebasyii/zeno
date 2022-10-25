@@ -1,5 +1,5 @@
 import { axiom } from '../../../';
-import { InvalidACLRule } from '../ssrf';
+import { InvalidACLRule } from '../axiom';
 
 describe('#validateDomainAcl', () => {
   const ax = axiom([]);
@@ -21,11 +21,12 @@ describe('#validateDomainAcl', () => {
 });
 
 describe('#InvalidACLRule', () => {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const badAxiomConstructor = () => {
     axiom([{ match: 'example.*', action: 'allow' }]);
   };
 
   it('invalid ACL rules', () => {
-    expect(badAxiomConstructor).toThrowError(new InvalidACLRule('example.*'));
+    expect(badAxiomConstructor).toThrow(new InvalidACLRule('example.*'));
   });
 });

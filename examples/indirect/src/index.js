@@ -1,4 +1,5 @@
 const express = require('express');
+const mysql = require('mysql');
 const util = require('util');
 const { Indirect } = require('zeno');
 
@@ -17,7 +18,6 @@ const indirect = new Indirect({
   redisClient: client,
 });
 
-const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
