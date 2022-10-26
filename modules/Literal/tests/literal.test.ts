@@ -1,4 +1,6 @@
-import { LiteralString, l } from '../literal';
+import literal from '../literal';
+
+const { l, LiteralString } = literal;
 
 describe('#LiteralString', () => {
 
@@ -25,10 +27,14 @@ describe('#LiteralString', () => {
     });
 
 
-    it('modified strings', () => {
+    it('concatenation', () => {
         const s: any = l`SELECT * FROM ` + 'users;';
         expect(s).toBe('SELECT * FROM users;');
         expect(s instanceof LiteralString).toBeFalsy();
+
+        expect(() => { l`SELECT * FROM ${'users;'}` }).toThrow(TypeError);
+        expect(l`SELECT * FROM ${l`users;`}` == 'SELECT * FROM users;').toBeTruthy();
+        expect(l`SELECT * FROM ${l`users;`}` instanceof LiteralString).toBeTruthy();
     });
 
 });
