@@ -2,17 +2,21 @@
 
 Provides string safety through a "literal string" class, preventing injection attacks such as SQL injection and OS command injection.
 
-This is similar to [PEP675](https://docs.python.org/3.11/whatsnew/3.11.html#pep-675-arbitrary-literal-string-type) in Python 3.11.
-
-## The Problem
+## A Great Idea From Another Great Language
 
 Injection attacks have been one of the most popular web application attacks to date. Fundamentally, there is an issue of differentiating potentially dangerous and dynamic strings from purely static ones, especially in large codebases.
 
-## How Does This Help?
+This concept is similar to [PEP675](https://peps.python.org/pep-0675/) in [Python 3.11](https://docs.python.org/3.11/whatsnew/3.11.html#pep-675-arbitrary-literal-string-type).
 
-Here, we provide a way of telling regular strings apart from a new class of strings called `LiteralString`s, allowing type checkers to enforce static strings even in vanilla JavaScript (as opposed to TypeScript).
+![pycon.jpg](./pycon.jpg)
 
-To create an "l-string", use the tagged template literal:
+By differentiating developer-defined, static strings from dynamic ones constructed from user input, developers are able to more easily prevent injection attacks.
+
+## Example Usage
+
+Here, we provide a way of telling regular strings apart from a new class of strings called `LiteralString`s (or as we prefer, "l-strings"), allowing type checkers to enforce static strings even in vanilla JavaScript. While vanilla JavaScript is not typed, developers can easily verify l-strings using `instanceOf`.
+
+To create an l-string, use the tagged template literal:
 
 ```javascript
 l`SELECT * FROM students`
