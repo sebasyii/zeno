@@ -25,13 +25,13 @@ l`SELECT * FROM students`
 These l-strings can interpolate with **other l-strings**, but **not regular strings**.
 
 ```javascript
-l`SELECT * FROM ${l`users;`}`
+l`SELECT * FROM ${l`users`};`
 ```
 
 is fine, but
 
 ```javascript
-l`SELECT * FROM ${'users;'}`
+l`SELECT * FROM ${'users'};`
 ```
 
 isn't.
