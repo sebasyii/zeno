@@ -1,4 +1,4 @@
-import { LiteralString, l } from './literal';
+import { LiteralString, l } from '../literal';
 
 describe('#LiteralString', () => {
 
