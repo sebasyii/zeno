@@ -3,12 +3,16 @@ import { createContext, runInContext } from 'vm';
 import cluster from 'cluster';
 import { cpus } from 'os';
 
-const cCPUs = cpus().length;
+// const cCPUs = cpus().length;
 
-const listen = (app: Application, port: number): void => {
+const listen = (
+  app: Application,
+  port: number,
+  cpusCount: number = cpus().length,
+): void => {
   if (cluster.isPrimary) {
     // Create a worker for each CPU
-    for (let i = 0; i < cCPUs; i++) {
+    for (let i = 0; i < cpusCount; i++) {
       cluster.fork();
     }
     cluster.on('online', function (worker) {
