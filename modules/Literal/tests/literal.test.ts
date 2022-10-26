@@ -1,4 +1,4 @@
-import literal from '../literal';
+import literal, { StringLiteral } from '../literal';
 
 const { l, LiteralString } = literal;
 
@@ -10,11 +10,11 @@ describe('#LiteralString', () => {
         expect(new LiteralString('SELECT * FROM users;') == 'SELECT * FROM users;').toBeTruthy();
         expect(new LiteralString('SELECT * FROM users;') === 'SELECT * FROM users;').toBeFalsy();
 
-        const primitive: any = "";
+        const primitive: unknown = "";
         expect(primitive instanceof LiteralString).toBeFalsy();
         expect(primitive instanceof String).toBeFalsy();
 
-        const stringObj: String = String("");
+        const stringObj: unknown = String("");
         expect(stringObj instanceof LiteralString).toBeFalsy();
     });
 
@@ -26,9 +26,14 @@ describe('#LiteralString', () => {
         expect(() => l`SELECT * FROM ${dbName};`).toThrow(TypeError);
     });
 
+    it('arguments', () => {
+        expect(() => new LiteralString()).toThrow(TypeError);
+        expect(() => new LiteralString('SELECT * FROM users;', 'extra')).toThrow(TypeError);
+        expect(() => new LiteralString(1)).toThrow(TypeError);
+    })
 
     it('concatenation', () => {
-        const s: any = l`SELECT * FROM ` + 'users;';
+        const s: unknown = l`SELECT * FROM ` + 'users;';
         expect(s).toBe('SELECT * FROM users;');
         expect(s instanceof LiteralString).toBeFalsy();
 
