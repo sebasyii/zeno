@@ -19,19 +19,19 @@ Here, we provide a way of telling regular strings apart from a new class of stri
 To create an l-string, use the tagged template literal:
 
 ```javascript
-l`SELECT * FROM students`
+l`SELECT * FROM students`;
 ```
 
 These l-strings can interpolate with **other l-strings**, but **not regular strings**.
 
 ```javascript
-l`SELECT * FROM ${l`users`};`
+l`SELECT * FROM ${l`users`};`;
 ```
 
 is fine, but
 
 ```javascript
-l`SELECT * FROM ${'users'};`
+l`SELECT * FROM ${'users'};`;
 ```
 
 isn't.
@@ -44,12 +44,12 @@ const { literal } = require('zeno');
 const { l, LiteralString } = literal;
 
 const runQuery = (sql) => {
-    if (sql instanceof LiteralString) {
-        console.log(`This is a safe literal string: ${sql}`);
-    } else {
-        console.log(`Not a literal string, could be unsafe: ${sql}`);
-    }
-}
+  if (sql instanceof LiteralString) {
+    console.log(`This is a safe literal string: ${sql}`);
+  } else {
+    console.log(`Not a literal string, could be unsafe: ${sql}`);
+  }
+};
 
 /**
  * @param {string} arbitraryString
@@ -58,12 +58,12 @@ const runQuery = (sql) => {
  * @returns {void}
  */
 const caller = (arbitraryString, queryString, tableName) => {
-    runQuery(l`SELECT * FROM students`);        // ok
-    runQuery(queryString);                      // ok
-    runQuery(l`SELECT * FROM ${tableName}`);    // ok
-    runQuery(arbitraryString);                  // type checker error
-    runQuery(`SELECT * FROM students WHERE name = ${arbitraryString}`);   // type checker error
-}
+  runQuery(l`SELECT * FROM students`); // ok
+  runQuery(queryString); // ok
+  runQuery(l`SELECT * FROM ${tableName}`); // ok
+  runQuery(arbitraryString); // type checker error
+  runQuery(`SELECT * FROM students WHERE name = ${arbitraryString}`); // type checker error
+};
 
 userInput = 'foo';
 caller(userInput, l`bar`, l`baz`);
@@ -77,10 +77,10 @@ const { literal } = require('zeno');
 const { l, isLiteralString } = literal;
 
 const runQuery = (sql) => {
-    if (isLiteralString(sql)) {
-        console.log(`This is a safe literal string: ${sql}`);
-    } else {
-        console.log(`Not a literal string, could be unsafe: ${sql}`);
-    }
-}
+  if (isLiteralString(sql)) {
+    console.log(`This is a safe literal string: ${sql}`);
+  } else {
+    console.log(`Not a literal string, could be unsafe: ${sql}`);
+  }
+};
 ```
