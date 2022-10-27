@@ -68,3 +68,19 @@ const caller = (arbitraryString, queryString, tableName) => {
 userInput = 'foo';
 caller(userInput, l`bar`, l`baz`);
 ```
+
+Users are also provided with `isLiteralString()` to check if a string is an l-string.
+
+```javascript
+const { literal } = require('zeno');
+
+const { l, isLiteralString } = literal;
+
+const runQuery = (sql) => {
+    if (isLiteralString(sql)) {
+        console.log(`This is a safe literal string: ${sql}`);
+    } else {
+        console.log(`Not a literal string, could be unsafe: ${sql}`);
+    }
+}
+```

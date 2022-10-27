@@ -1,6 +1,6 @@
-import literal, { StringLiteral } from '../literal';
+import literal from '../literal';
 
-const { l, LiteralString } = literal;
+const { l, LiteralString, isLiteralString } = literal;
 
 describe('#LiteralString', () => {
 
@@ -30,6 +30,22 @@ describe('#LiteralString', () => {
         expect(() => new LiteralString()).toThrow(TypeError);
         expect(() => new LiteralString('SELECT * FROM users;', 'extra')).toThrow(TypeError);
         expect(() => new LiteralString(1)).toThrow(TypeError);
+    })
+
+    // const s = l`SELECT * FROM users; ${"hello"}`;
+    it("Test", () => {
+        const s = l`hello`;
+        const t = l`world`;
+        const u = l`hello world`;
+        const v = l`e ${s}${t}${u}`;
+
+        const w = "HELLO";
+
+        expect(isLiteralString(v)).toBeTruthy();
+        expect(isLiteralString(w)).toBeTruthy();
+        
+
+        expect(v =='e helloworldhello world').toBeTruthy();
     })
 
     it('concatenation', () => {
