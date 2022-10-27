@@ -4,6 +4,6 @@
     "sourceMap": false,
     "removeComments": true
   },
-  "include": ["src/**/*"],
+  "include": ["modules/**/*", "index.ts"],
   "exclude": ["**/*.test.ts", "**/*.mock.ts"]
 }

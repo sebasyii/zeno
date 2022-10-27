@@ -3,7 +3,7 @@ import {
   IPV6_CIDR_REGEX,
   V4_REGEX,
   V6_REGEX,
-} from './constants';
+} from './constants.js';
 
 const isCIDR = (target: string): boolean => {
   // if target is an IPv4 address
