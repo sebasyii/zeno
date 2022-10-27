@@ -32,20 +32,19 @@ describe('#LiteralString', () => {
         expect(() => new LiteralString(1)).toThrow(TypeError);
     })
 
-    // const s = l`SELECT * FROM users; ${"hello"}`;
-    it("Test", () => {
+    it("interpolation", () => {
         const s = l`hello`;
         const t = l`world`;
         const u = l`hello world`;
         const v = l`e ${s}${t}${u}`;
 
-        const w = "HELLO";
+        const w = l`HELLO`;
 
         expect(isLiteralString(v)).toBeTruthy();
         expect(isLiteralString(w)).toBeTruthy();
-        
 
-        expect(v =='e helloworldhello world').toBeTruthy();
+
+        expect(v == 'e helloworldhello world').toBeTruthy();
     })
 
     it('concatenation', () => {
@@ -53,9 +52,9 @@ describe('#LiteralString', () => {
         expect(s).toBe('SELECT * FROM users;');
         expect(s instanceof LiteralString).toBeFalsy();
 
-        expect(() => { l`SELECT * FROM ${'users;'}` }).toThrow(TypeError);
-        expect(l`SELECT * FROM ${l`users;`}` == 'SELECT * FROM users;').toBeTruthy();
-        expect(l`SELECT * FROM ${l`users;`}` instanceof LiteralString).toBeTruthy();
+        expect(() => { l`SELECT * FROM ${'users'};` }).toThrow(TypeError);
+        expect(l`SELECT * FROM ${l`users`};` == 'SELECT * FROM users;').toBeTruthy();
+        expect(l`SELECT * FROM ${l`users`};` instanceof LiteralString).toBeTruthy();
     });
 
 });

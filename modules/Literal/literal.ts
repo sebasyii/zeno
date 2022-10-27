@@ -1,4 +1,5 @@
 const isLiteralString = (value: unknown): value is LiteralString => value instanceof LiteralString;
+
 class LiteralString extends String {
   constructor(...args: unknown[]) {
     if (args.length !== 1)
