@@ -2,7 +2,9 @@
 
 A collection of modules to secure your [express.js](https://github.com/visionmedia/express) application.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/zPScLYLaZ4s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://user-images.githubusercontent.com/39144422/198509504-21ebaa6e-26e1-4eef-9643-9d4419c5b58f.mp4
+
+[Watch on YouTube](https://www.youtube.com/watch?v=zPScLYLaZ4s)
 
 ## Modules
 
