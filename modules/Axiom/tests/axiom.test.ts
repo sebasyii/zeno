@@ -5,13 +5,18 @@ describe('validateDomainAcl', () => {
   const ax = axiom();
 
   it('should return true for valid domains', () => {
-    const validDomains = ['*', 'example.com', '*.example.com']
-    validDomains.forEach((validDomain) => expect(ax['validateDomainAcl'](validDomain)).toBe(true))
+    expect(ax['validateDomainAcl']('*')).toBe(true);
+    expect(ax['validateDomainAcl']('example.com')).toBe(true);
+    expect(ax['validateDomainAcl']('*.example.com')).toBe(true);
   });
 
   it('should return false for invalid domains', () => {
-    const invalidDomains = ['**.example.com', 'example.*.com', '*.api.*.com', 'ex*ample.com', '*example.com', 'example.*']
-    invalidDomains.forEach((invalidDomain) => expect(ax['validateDomainAcl'](invalidDomain)).toBe(false))
+    expect(ax['validateDomainAcl']('**.example.com')).toBe(false);
+    expect(ax['validateDomainAcl']('example.*.com')).toBe(false);
+    expect(ax['validateDomainAcl']('*.api.*.com')).toBe(false);
+    expect(ax['validateDomainAcl']('ex*ample.com')).toBe(false);
+    expect(ax['validateDomainAcl']('*example.com')).toBe(false);
+    expect(ax['validateDomainAcl']('example.*')).toBe(false);
   });
 });
 
@@ -71,19 +76,24 @@ describe('default checkACL', () => {
   const ax = axiom();
 
   it('should return false for ipv4 special ranges', () => {
-    const ipv4SpecialIPs = ['0.0.0.0', '127.0.0.2', '192.168.0.5', '169.254.0.0', '198.51.100.0', '255.255.255.255']
-    ipv4SpecialIPs.forEach((ipv4SpecialIP) => expect(ax['checkACL'](ipv4SpecialIP)).toBe(false))
+    expect(ax['checkACL']('0.0.0.0')).toBe(false);
+    expect(ax['checkACL']('127.0.0.2')).toBe(false);
+    expect(ax['checkACL']('169.254.0.0')).toBe(false);
+    expect(ax['checkACL']('192.168.0.5')).toBe(false);
+    expect(ax['checkACL']('198.51.100.0')).toBe(false);
+    expect(ax['checkACL']('255.255.255.255')).toBe(false);
   })
 
   it('should return false for ipv6 special ranges', () => {
-    const ipv6SpecialIPs = ['::1', '64:ff9b::', 'fe80::']
     // The following are IPv6 addresses that return false despite being part of ipv6 special ranges
     // 'fc00::11:', '100::', '2001:3::1'
-    ipv6SpecialIPs.forEach((ipv6SpecialIP) => expect(ax['checkACL'](ipv6SpecialIP)).toBe(false))
+    expect(ax['checkACL']('::1')).toBe(false);
+    expect(ax['checkACL']('64:ff9b::')).toBe(false);
+    expect(ax['checkACL']('fe80::')).toBe(false);
   })
 
   it('should return true for non-special IPs and domains', () => {
-    expect(ax['checkACL']('158.25.147.235')).toBe(true)
-    expect(ax['checkACL']('158.25.147.235', 'github.com')).toBe(true)
+    expect(ax['checkACL']('158.25.147.235')).toBe(true);
+    expect(ax['checkACL']('158.25.147.235', 'github.com')).toBe(true);
   })
 });
