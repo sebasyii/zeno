@@ -164,16 +164,14 @@ class Axiom implements Axiom {
   };
 }
 
-const axiom = (acl: string | axiomArgs['acl']): Axiom => {
+const axiom = (acl: string | axiomArgs['acl'] = [
+  { match: 'special_ranges', action: 'deny' },
+  { match: '*', action: 'allow' },
+]): Axiom => {
+  // Block all special address blocks by default
   const args: axiomArgs = { acl: [] };
 
-  if (typeof acl === 'undefined') {
-    // Block all special address blocks by default
-    acl = [
-      { match: 'special_ranges', action: 'deny' },
-      { match: '*', action: 'allow' },
-    ];
-  } else if (typeof acl === 'string') {
+  if (typeof acl === 'string') {
     acl = yaml.load(fs.readFileSync(acl, 'utf8')).rules;
   }
   args.acl = acl as axiomArgs['acl'];
