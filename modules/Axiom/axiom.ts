@@ -8,22 +8,20 @@ import minimatch from 'minimatch';
 import { isCIDR } from '../utils.js';
 
 interface axiomArgs {
-  acl: { match: string; action: string }[];
+  acl: { match: string; action: "allow" | "deny" }[];
 }
 
+type validAclMatch = null | string | ipaddr.IPv4 | ipaddr.IPv6 | [ipaddr.IPv4 | ipaddr.IPv6, number];
+type validAclType = "special_ranges" | "ipv4" | "ipv6" | "domain" | "*";
 type axiomYaml = {
   rules: axiomArgs['acl'];
 };
 
 interface Axiom {
   acl: {
-    match:
-      | string
-      | ipaddr.IPv4
-      | ipaddr.IPv6
-      | [ipaddr.IPv4 | ipaddr.IPv6, number];
-    action: string;
-    type: string;
+    match: validAclMatch;
+    action: "allow" | "deny";
+    type: validAclType;
   }[];
 }
 
@@ -55,13 +53,7 @@ class Axiom implements Axiom {
     this.acl = [];
 
     for (const acl of args.acl) {
-      let match:
-          | string
-          | ipaddr.IPv4
-          | ipaddr.IPv6
-          | [ipaddr.IPv4 | ipaddr.IPv6, number]
-          | null,
-        type: string;
+      let match: validAclMatch, type: validAclType;
       const action = acl.action;
 
       if (acl.match === 'special_ranges') {
@@ -82,11 +74,7 @@ class Axiom implements Axiom {
         type = 'domain';
       }
 
-      this.acl.push({
-        match: match,
-        action: action,
-        type: type,
-      });
+      this.acl.push({ match, action, type });
     }
 
     // @see https://github.com/facebook/flow/issues/7670
