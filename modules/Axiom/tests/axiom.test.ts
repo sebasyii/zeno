@@ -56,18 +56,18 @@ describe('checkACL', () => {
   ]);
 
   it('should return true for whitelisted domains', () => {
-    expect(ax['checkACL']('benign.github.com', 'benign.github.com')).toBe(true);
+    expect(ax['checkACL']('8.8.8.8', 'benign.github.com')).toBe(true);
   })
 
   it('should return false for blacklisted domains', () => {
-    expect(ax['checkACL']('evil.github.com', 'evil.github.com')).toBe(false);
+    expect(ax['checkACL']('8.8.8.8', 'evil.github.com')).toBe(false);
   })
 
   it('should return false for denied ipv4 networks', () => {
-    expect(ax['checkACL']('1.0.0.1', '1.0.0.1')).toBe(false);
+    expect(ax['checkACL']('1.0.0.1')).toBe(false);
   })
 
   it ('should return false for denied ipv6 networks', () => {
-    expect(ax['checkACL']('2001:db8::1', '2001:db8::1')).toBe(false);
+    expect(ax['checkACL']('2001:db8::1')).toBe(false);
   })
 });

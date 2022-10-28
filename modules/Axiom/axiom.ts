@@ -110,7 +110,7 @@ class Axiom implements Axiom {
     return true;
   };
 
-  private checkACL = (ip: string, domain: string): boolean => {
+  private checkACL = (ip: string, domain?: string): boolean => {
     const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
     for (const acl of this.acl) {
       if (
@@ -125,7 +125,7 @@ class Axiom implements Axiom {
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
           ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
-        (acl.type === 'domain' && this.checkDomain(domain, acl.match as string))
+        (acl.type === 'domain' && domain && this.checkDomain(domain, acl.match as string))
       )
         return acl.action === 'allow';
     }
@@ -143,7 +143,7 @@ class Axiom implements Axiom {
       agent.createConnection = (options, callback): Socket => {
         // If an IP address is provided, no lookup is performed.
         const { host: address } = options;
-        if (!this.checkACL(address, address)) {
+        if (!this.checkACL(address)) {
           throw new Error(`Call to ${address} is blocked.`);
         }
 
