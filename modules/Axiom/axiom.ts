@@ -11,6 +11,10 @@ interface axiomArgs {
   acl: { match: string; action: string }[];
 }
 
+type axiomYaml = {
+  rules: axiomArgs['acl']
+}
+
 interface Axiom {
   acl: {
     match:
@@ -173,12 +177,11 @@ const axiom = (acl: string | axiomArgs['acl'] = [
   { match: '*', action: 'allow' },
 ]): Axiom => {
   // Block all special address blocks by default
-  const args: axiomArgs = { acl: [] };
 
   if (typeof acl === 'string') {
-    acl = yaml.load(fs.readFileSync(acl, 'utf8')).rules;
+    acl = (yaml.load(fs.readFileSync(acl, 'utf8')) as axiomYaml).rules;
   }
-  args.acl = acl as axiomArgs['acl'];
+  const args: axiomArgs = { acl };
   return new Axiom(args);
 };
 
