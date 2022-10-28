@@ -111,8 +111,10 @@ class Axiom implements Axiom {
     if (domain === '*') return true;
 
     // There can only be one wildcard, and it must be at the beginning
-    if ((domain.match(/\*/g) || []).length > 1) return false;
     if (!domain.startsWith('*')) return false;
+    if (domain.match(/\*/g).length > 1) return false;
+
+    // The wildcard cannot be part of a subdomain
     if (domain[1] !== '.') return false;
     return true;
   };
