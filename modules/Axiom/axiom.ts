@@ -69,6 +69,9 @@ class Axiom implements Axiom {
       } else if (ipaddr && ipaddr.isValid(acl.match)) {
         match = ipaddr.process(acl.match);
         type = match.kind();
+      } else if (acl.match === '*') {
+        match = acl.match;
+        type = "*";
       } else {
         match = acl.match;
         if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match);
@@ -125,7 +128,8 @@ class Axiom implements Axiom {
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
           ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
-        (acl.type === 'domain' && domain && this.checkDomain(domain, acl.match as string))
+        (acl.type === 'domain' && domain && this.checkDomain(domain, acl.match as string)) ||
+        (acl.type === '*' && acl.match === '*')
       )
         return acl.action === 'allow';
     }
