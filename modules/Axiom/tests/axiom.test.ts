@@ -30,3 +30,44 @@ describe('InvalidACLRule', () => {
     expect(badAxiomConstructor).toThrow(new InvalidACLRule('example.*'));
   });
 });
+
+describe('checkACL', () => {
+  const ax = axiom([
+    {
+      match: 'evil.github.com',
+      action: 'deny',
+    },
+    {
+      match: '*.github.com',
+      action: 'allow',
+    },
+    {
+      match: '2001:db8::/32',
+      action: 'deny',
+    },
+    {
+      match: '1.0.0.0/8',
+      action: 'deny',
+    },
+    {
+      match: '*',
+      action: 'allow',
+    },
+  ]);
+
+  it('should return true for whitelisted domains', () => {
+    expect(ax['checkACL']('benign.github.com', 'benign.github.com')).toBe(true);
+  })
+
+  it('should return false for blacklisted domains', () => {
+    expect(ax['checkACL']('evil.github.com', 'evil.github.com')).toBe(false);
+  })
+
+  it('should return false for denied ipv4 networks', () => {
+    expect(ax['checkACL']('1.0.0.1', '1.0.0.1')).toBe(false);
+  })
+
+  it ('should return false for denied ipv6 networks', () => {
+    expect(ax['checkACL']('2001:db8::1', '2001:db8::1')).toBe(false);
+  })
+});
