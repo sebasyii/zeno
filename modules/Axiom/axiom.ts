@@ -12,8 +12,8 @@ interface axiomArgs {
 }
 
 type axiomYaml = {
-  rules: axiomArgs['acl']
-}
+  rules: axiomArgs['acl'];
+};
 
 interface Axiom {
   acl: {
@@ -75,7 +75,7 @@ class Axiom implements Axiom {
         type = match.kind();
       } else if (acl.match === '*') {
         match = acl.match;
-        type = "*";
+        type = '*';
       } else {
         match = acl.match;
         if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match);
@@ -132,7 +132,9 @@ class Axiom implements Axiom {
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
           ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
-        (acl.type === 'domain' && domain && this.checkDomain(domain, acl.match as string)) ||
+        (acl.type === 'domain' &&
+          domain &&
+          this.checkDomain(domain, acl.match as string)) ||
         (acl.type === '*' && acl.match === '*')
       )
         return acl.action === 'allow';
@@ -172,10 +174,12 @@ class Axiom implements Axiom {
   };
 }
 
-const axiom = (acl: string | axiomArgs['acl'] = [
-  { match: 'special_ranges', action: 'deny' },
-  { match: '*', action: 'allow' },
-]): Axiom => {
+const axiom = (
+  acl: string | axiomArgs['acl'] = [
+    { match: 'special_ranges', action: 'deny' },
+    { match: '*', action: 'allow' },
+  ],
+): Axiom => {
   // Block all special address blocks by default
 
   if (typeof acl === 'string') {
