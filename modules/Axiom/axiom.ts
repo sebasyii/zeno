@@ -8,11 +8,16 @@ import minimatch from 'minimatch';
 import { isCIDR } from '../utils.js';
 
 interface axiomArgs {
-  acl: { match: string; action: "allow" | "deny" }[];
+  acl: { match: string; action: 'allow' | 'deny' }[];
 }
 
-type validAclMatch = null | string | ipaddr.IPv4 | ipaddr.IPv6 | [ipaddr.IPv4 | ipaddr.IPv6, number];
-type validAclType = "special_ranges" | "ipv4" | "ipv6" | "domain" | "*";
+type validAclMatch =
+  | null
+  | string
+  | ipaddr.IPv4
+  | ipaddr.IPv6
+  | [ipaddr.IPv4 | ipaddr.IPv6, number];
+type validAclType = 'special_ranges' | 'ipv4' | 'ipv6' | 'domain' | '*';
 type axiomYaml = {
   rules: axiomArgs['acl'];
 };
@@ -20,7 +25,7 @@ type axiomYaml = {
 interface Axiom {
   acl: {
     match: validAclMatch;
-    action: "allow" | "deny";
+    action: 'allow' | 'deny';
     type: validAclType;
   }[];
 }
