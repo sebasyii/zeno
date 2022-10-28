@@ -8,18 +8,25 @@ import minimatch from 'minimatch';
 import { isCIDR } from '../utils.js';
 
 interface axiomArgs {
-  acl: { match: string; action: string }[];
+  acl: { match: string; action: 'allow' | 'deny' }[];
 }
+
+type validAclMatch =
+  | null
+  | string
+  | ipaddr.IPv4
+  | ipaddr.IPv6
+  | [ipaddr.IPv4 | ipaddr.IPv6, number];
+type validAclType = 'special_ranges' | 'ipv4' | 'ipv6' | 'domain' | '*';
+type axiomYaml = {
+  rules: axiomArgs['acl'];
+};
 
 interface Axiom {
   acl: {
-    match:
-      | string
-      | ipaddr.IPv4
-      | ipaddr.IPv6
-      | [ipaddr.IPv4 | ipaddr.IPv6, number];
-    action: string;
-    type: string;
+    match: validAclMatch;
+    action: 'allow' | 'deny';
+    type: validAclType;
   }[];
 }
 
@@ -51,13 +58,7 @@ class Axiom implements Axiom {
     this.acl = [];
 
     for (const acl of args.acl) {
-      let match:
-          | string
-          | ipaddr.IPv4
-          | ipaddr.IPv6
-          | [ipaddr.IPv4 | ipaddr.IPv6, number]
-          | null,
-        type: string;
+      let match: validAclMatch, type: validAclType;
       const action = acl.action;
 
       if (acl.match === 'special_ranges') {
@@ -69,17 +70,16 @@ class Axiom implements Axiom {
       } else if (ipaddr && ipaddr.isValid(acl.match)) {
         match = ipaddr.process(acl.match);
         type = match.kind();
+      } else if (acl.match === '*') {
+        match = acl.match;
+        type = '*';
       } else {
         match = acl.match;
         if (!this.validateDomainAcl(match)) throw new InvalidACLRule(match);
         type = 'domain';
       }
 
-      this.acl.push({
-        match: match,
-        action: action,
-        type: type,
-      });
+      this.acl.push({ match, action, type });
     }
 
     // @see https://github.com/facebook/flow/issues/7670
@@ -104,13 +104,15 @@ class Axiom implements Axiom {
     if (domain === '*') return true;
 
     // There can only be one wildcard, and it must be at the beginning
-    if ((domain.match(/\*/g) || []).length > 1) return false;
     if (!domain.startsWith('*')) return false;
+    if (domain.match(/\*/g).length > 1) return false;
+
+    // The wildcard cannot be part of a subdomain
     if (domain[1] !== '.') return false;
     return true;
   };
 
-  private checkACL = (ip: string, domain: string): boolean => {
+  private checkACL = (ip: string, domain?: string): boolean => {
     const ipAddr = ipaddr.isValid(ip) ? ipaddr.process(ip) : null;
     for (const acl of this.acl) {
       if (
@@ -125,7 +127,10 @@ class Axiom implements Axiom {
           ipAddr &&
           ipAddr.kind() === 'ipv6' &&
           ipAddr.match(acl.match as [ipaddr.IPv6, number])) ||
-        (acl.type === 'domain' && this.checkDomain(domain, acl.match as string))
+        (acl.type === 'domain' &&
+          domain &&
+          this.checkDomain(domain, acl.match as string)) ||
+        (acl.type === '*' && acl.match === '*')
       )
         return acl.action === 'allow';
     }
@@ -143,7 +148,7 @@ class Axiom implements Axiom {
       agent.createConnection = (options, callback): Socket => {
         // If an IP address is provided, no lookup is performed.
         const { host: address } = options;
-        if (!this.checkACL(address, address)) {
+        if (!this.checkACL(address)) {
           throw new Error(`Call to ${address} is blocked.`);
         }
 
@@ -164,19 +169,18 @@ class Axiom implements Axiom {
   };
 }
 
-const axiom = (acl: string | axiomArgs['acl']): Axiom => {
-  const args: axiomArgs = { acl: [] };
+const axiom = (
+  acl: string | axiomArgs['acl'] = [
+    { match: 'special_ranges', action: 'deny' },
+    { match: '*', action: 'allow' },
+  ],
+): Axiom => {
+  // Block all special address blocks by default
 
-  if (typeof acl === 'undefined') {
-    // Block all special address blocks by default
-    acl = [
-      { match: 'special_ranges', action: 'deny' },
-      { match: '*', action: 'allow' },
-    ];
-  } else if (typeof acl === 'string') {
-    acl = yaml.load(fs.readFileSync(acl, 'utf8')).rules;
+  if (typeof acl === 'string') {
+    acl = (yaml.load(fs.readFileSync(acl, 'utf8')) as axiomYaml).rules;
   }
-  args.acl = acl as axiomArgs['acl'];
+  const args: axiomArgs = { acl };
   return new Axiom(args);
 };
 
