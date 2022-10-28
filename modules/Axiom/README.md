@@ -48,7 +48,7 @@ const { axiom } = require('zeno');
 axiom('./sample_config.yaml');
 ```
 
-A sample configuration can be found [here](../../examples/ssrf/sample_config.yaml).
+A sample configuration can be found [here](../../examples/axiom/sample_config.yaml).
 
 Alternatively, provide the ACL as an array of rules.
 
