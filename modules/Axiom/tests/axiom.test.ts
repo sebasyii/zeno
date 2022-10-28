@@ -85,8 +85,6 @@ describe('default checkACL', () => {
   })
 
   it('should return false for ipv6 special ranges', () => {
-    // The following are IPv6 addresses that return false despite being part of ipv6 special ranges
-    // 'fc00::11:', '100::', '2001:3::1'
     expect(ax['checkACL']('::1')).toBe(false);
     expect(ax['checkACL']('64:ff9b::')).toBe(false);
     expect(ax['checkACL']('fe80::')).toBe(false);
