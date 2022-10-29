@@ -1,12 +1,11 @@
-import fs from 'fs';
 import { Socket } from 'net';
 import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
-import yaml from 'js-yaml';
 import minimatch from 'minimatch';
 import { isCIDR } from '../ip_utils.js';
-import { axiomYaml, validAclMatch, validAclType, httpAgent, httpsAgent, InvalidACLRule } from './types'
+import { validAclMatch, validAclType, httpAgent, httpsAgent, InvalidACLRule } from './types';
+import { loadYamlFile } from './file';
 
 interface Axiom {
   acl: {
@@ -145,7 +144,7 @@ const axiom = (
   // Block all special address blocks by default
 
   if (typeof acl === 'string') {
-    acl = (yaml.load(fs.readFileSync(acl, 'utf8')) as axiomYaml).rules;
+    acl = loadYamlFile(acl).rules;
   }
   const args: axiomArgs = { acl };
   return new Axiom(args);

@@ -4,10 +4,6 @@ import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
 
-export type axiomYaml = {
-  rules: { match: string; action: 'allow' | 'deny' }[];
-};
-
 export type validAclMatch =
   | null
   | string
