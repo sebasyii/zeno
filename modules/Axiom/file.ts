@@ -1,11 +1,11 @@
-import fs from 'fs';
-import yaml from 'js-yaml';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 
 type axiomYaml = {
   rules: { match: string; action: 'allow' | 'deny' }[];
 };
 
-class FileNotFoundError extends Error {
+export class FileNotFoundError extends Error {
   readonly filename: string;
 
   constructor(filename: string) {
