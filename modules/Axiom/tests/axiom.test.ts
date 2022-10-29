@@ -1,5 +1,5 @@
 import { axiom } from '../../../';
-import { InvalidACLRule } from '../axiom';
+import { InvalidACLRule } from '../types';
 
 describe('validateDomainAcl', () => {
   const ax = axiom();

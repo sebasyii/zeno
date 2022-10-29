@@ -1,26 +1,12 @@
 import fs from 'fs';
-import net, { Socket } from 'net';
+import { Socket } from 'net';
 import http from 'http';
 import https from 'https';
 import ipaddr from 'ipaddr.js';
 import yaml from 'js-yaml';
 import minimatch from 'minimatch';
 import { isCIDR } from '../ip_utils.js';
-
-interface axiomArgs {
-  acl: { match: string; action: 'allow' | 'deny' }[];
-}
-
-type validAclMatch =
-  | null
-  | string
-  | ipaddr.IPv4
-  | ipaddr.IPv6
-  | [ipaddr.IPv4 | ipaddr.IPv6, number];
-type validAclType = 'special_ranges' | 'ipv4' | 'ipv6' | 'domain' | '*';
-type axiomYaml = {
-  rules: axiomArgs['acl'];
-};
+import { axiomYaml, validAclMatch, validAclType, httpAgent, httpsAgent, InvalidACLRule } from './types'
 
 interface Axiom {
   acl: {
@@ -30,27 +16,8 @@ interface Axiom {
   }[];
 }
 
-interface httpAgent extends http.Agent {
-  createConnection: (
-    options: https.RequestOptions,
-    callback: (err: Error, socket: net.Socket) => void,
-  ) => net.Socket;
-}
-
-interface httpsAgent extends https.Agent {
-  createConnection: (
-    options: https.RequestOptions,
-    callback: (err: Error, socket: net.Socket) => void,
-  ) => net.Socket;
-}
-
-export class InvalidACLRule extends Error {
-  readonly domain: string;
-
-  constructor(domain: string) {
-    super(`Domain provided ${domain} is an invalid ACL rule`);
-    this.domain = domain;
-  }
+interface axiomArgs {
+  acl: { match: string; action: 'allow' | 'deny' }[];
 }
 
 class Axiom implements Axiom {
