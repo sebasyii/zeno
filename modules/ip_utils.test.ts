@@ -1,5 +1,5 @@
 import { isIPv6 } from 'net';
-import { isCIDR, isIPV4 } from './utils';
+import { isCIDR, isIPV4 } from './ip_utils';
 
 describe('isCIDR', () => {
   it('should return true for valid CIDR', () => {

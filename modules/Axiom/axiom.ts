@@ -5,7 +5,7 @@ import https from 'https';
 import ipaddr from 'ipaddr.js';
 import yaml from 'js-yaml';
 import minimatch from 'minimatch';
-import { isCIDR } from '../utils.js';
+import { isCIDR } from '../ip_utils.js';
 
 interface axiomArgs {
   acl: { match: string; action: 'allow' | 'deny' }[];
