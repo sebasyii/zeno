@@ -8,7 +8,7 @@
     "node": ">= 16"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",
