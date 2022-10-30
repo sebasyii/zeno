@@ -1,5 +1,5 @@
 {
-  "name": "zeno",
+  "name": "@zenots/zeno.js",
   "version": "0.0.0",
   "description": "Zeno",
   "main": "build/index.js",

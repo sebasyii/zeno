@@ -16,13 +16,13 @@ https://user-images.githubusercontent.com/39144422/198509504-21ebaa6e-26e1-4eef-
 ## Installation
 
 ```bash
-npm install zeno
+npm install @zenots/zenojs
 ```
 
 or
 
 ```bash
-yarn add zeno
+yarn add @zenots/zenojs
 ```
 
 Also make sure that you have Node.js 8 or newer in order to use it.
