@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/39144422/198509504-21ebaa6e-26e1-4eef-
 ## Installation
 
 ```bash
-npm install @zenots/zenojs
+npm i @zenots/zeno
 ```
 
 Also make sure that you have Node.js 8 or newer in order to use it.
