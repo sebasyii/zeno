@@ -4,7 +4,13 @@ import https from 'https';
 import ipaddr from 'ipaddr.js';
 import minimatch from 'minimatch';
 import { isCIDR } from '../ip_utils.js';
-import { validAclMatch, validAclType, httpAgent, httpsAgent, InvalidACLRule } from './types';
+import {
+  validAclMatch,
+  validAclType,
+  httpAgent,
+  httpsAgent,
+  InvalidACLRule,
+} from './types';
 import { loadYamlFile } from './file';
 
 interface Axiom {
@@ -122,7 +128,7 @@ class Axiom implements Axiom {
         return socket.destroy(new Error(`Call to ${host} is blocked.`));
       });
       return socket;
-    }
+    };
     return agent;
   };
 }
