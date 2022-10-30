@@ -48,7 +48,7 @@
     "test": "jest --coverage",
     "prettier": "prettier --config .prettierrc --write .",
     "test:watch": "jest --watch",
-    "postinstall": "npm run build:release"
+    "prepublish": "npm run clean && npm run build:release"
   },
   "license": "MIT",
   "dependencies": {
