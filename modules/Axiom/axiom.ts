@@ -1,6 +1,6 @@
 import { Socket } from 'net';
-import * as http from 'http';
-import * as https from 'https';
+import http from 'http';
+import https from 'https';
 import ipaddr from 'ipaddr.js';
 import minimatch from 'minimatch';
 import { isCIDR } from '../ip_utils.js';
