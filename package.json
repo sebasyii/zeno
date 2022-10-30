@@ -1,6 +1,6 @@
 {
   "name": "@zenots/zeno.js",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "Zeno",
   "main": "build/index.js",
   "engines": {
@@ -32,6 +32,7 @@
   },
   "scripts": {
     "start": "node build/src/main.js",
+    "rimraf": "./node_modules/rimraf/bin.js",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.json",
