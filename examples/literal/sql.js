@@ -1,4 +1,4 @@
-const { literal } = require('zeno');
+const { literal } = require('@zenots/zeno');
 
 const { l, LiteralString } = literal;
 

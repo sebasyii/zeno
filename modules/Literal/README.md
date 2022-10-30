@@ -39,7 +39,7 @@ isn't.
 Use l-strings to create and construct static strings, then validate that the final, resulting string is also an l-string before passing it into a sensitive function.
 
 ```javascript
-const { literal } = require('zeno');
+const { literal } = require('@zenots/zeno');
 
 const { l, LiteralString } = literal;
 
@@ -72,7 +72,7 @@ caller(userInput, l`bar`, l`baz`);
 Users are also provided with `isLiteralString()` to check if a string is an l-string.
 
 ```javascript
-const { literal } = require('zeno');
+const { literal } = require('@zenots/zeno');
 
 const { l, isLiteralString } = literal;
 

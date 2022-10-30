@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "Zeno Example",
   "engines": {
-    "node": ">= 16.13 <17"
+    "node": ">= 16"
   },
   "license": "MIT",
   "dependencies": {
-    "zeno": "file:../.."
+    "@zenots/zeno": "^1.0.0"
   }
 }

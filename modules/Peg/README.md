@@ -18,7 +18,7 @@ Peg will run the route handler in a new [VM](https://nodejs.org/api/vm.html#vm-e
 
 ```javascript
 const express = require('express');
-const { peg } = require('zeno');
+const { peg } = require('@zenots/zeno');
 
 const app = express();
 

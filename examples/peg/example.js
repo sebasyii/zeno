@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const util = require('util');
-const { peg } = require('zeno');
+const { peg } = require('@zenots/zeno');
 
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,

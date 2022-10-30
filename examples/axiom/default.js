@@ -1,6 +1,6 @@
 (async () => {
   const axios = require('axios');
-  const { axiom } = require('zeno');
+  const { axiom } = require('@zenots/zeno');
 
   axiom();
 

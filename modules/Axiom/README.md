@@ -35,7 +35,7 @@ Upon loading Axiom, it will automatically apply the ACL rules to **all** outgoin
 Using Axiom with the default configuration will block all special address blocks.
 
 ```javascript
-const { axiom } = require('zeno');
+const { axiom } = require('@zenots/zeno');
 
 axiom();
 ```
@@ -43,7 +43,7 @@ axiom();
 To configure Axiom with a YAML file, simply provide the filename.
 
 ```javascript
-const { axiom } = require('zeno');
+const { axiom } = require('@zenots/zeno');
 
 axiom('./sample_config.yaml');
 ```
@@ -53,7 +53,7 @@ A sample configuration can be found [here](../../examples/axiom/sample_config.ya
 Alternatively, provide the ACL as an array of rules.
 
 ```javascript
-const { axiom } = require('zeno');
+const { axiom } = require('@zenots/zeno');
 
 axiom([
   {
@@ -82,7 +82,7 @@ axiom([
 The following is equivalent to running Axiom with the default configuration.
 
 ```javascript
-const { axiom } = require('zeno');
+const { axiom } = require('@zenots/zeno');
 
 axiom([
   {
