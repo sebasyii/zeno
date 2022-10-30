@@ -1,10 +1,14 @@
 {
-  "name": "@zenots/zeno.js",
+  "name": "@zenots/zeno",
   "version": "0.1.3",
   "description": "Zeno",
   "main": "build/index.js",
+  "homepage": "https://github.com/sebasyii/zeno",
   "engines": {
-    "node": ">= 16.13 <17"
+    "node": ">= 16"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",
