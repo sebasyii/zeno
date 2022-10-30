@@ -36,8 +36,7 @@
   },
   "scripts": {
     "start": "node build/src/main.js",
-    "rimraf": "./node_modules/rimraf/bin.js",
-    "clean": "npm run rimraf coverage build tmp",
+    "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -w -p tsconfig.json",
