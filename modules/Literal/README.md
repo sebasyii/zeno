@@ -76,4 +76,3 @@ The following methods can return `LiteralString`s.
 ### `LiteralString.concat(str1, str2, /* …, */ strN)`
 
 Returns a `LiteralString` if all arguments are `LiteralString`s, otherwise returns a regular string.
-
