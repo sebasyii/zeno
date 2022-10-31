@@ -76,3 +76,7 @@ The following methods can return `LiteralString`s.
 ### `LiteralString.concat(str1, str2, /* …, */ strN)`
 
 Returns a `LiteralString` if all arguments are `LiteralString`s, otherwise returns a regular string.
+
+### `LiteralString.replace(searchValue, replaceValue)`
+
+Returns a `LiteralString` if `replaceValue` is a `LiteralString`, otherwise returns a regular string.
