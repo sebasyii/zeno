@@ -18,8 +18,8 @@ class LiteralString extends String {
   // @ts-expect-error return type is LiteralString
   concat(...args: (LiteralString | string)[]): LiteralString | string {
     if (!args.every((arg) => isLiteralString(arg)))
-      return super.concat(...args as string[]);
-    return new LiteralString(super.concat(...args as string[]));
+      return super.concat(...(args as string[]));
+    return new LiteralString(super.concat(...(args as string[])));
   }
 
   // @ts-expect-error return type is LiteralString
@@ -28,10 +28,18 @@ class LiteralString extends String {
   }
 
   // @ts-expect-error return type is LiteralString
-  replace(pattern: LiteralString | string | RegExp, replacement: LiteralString | string | ((substring: string, ...args: any[]) => string)): LiteralString | string {
+  replace(
+    pattern: LiteralString | string | RegExp,
+    replacement:
+      | LiteralString
+      | string
+      | ((substring: string, ...args: any[]) => string),
+  ): LiteralString | string {
     if (!isLiteralString(replacement))
       return super.replace(pattern as string | RegExp, replacement);
-    return new LiteralString(super.replace(pattern as string | RegExp, replacement as string));
+    return new LiteralString(
+      super.replace(pattern as string | RegExp, replacement as string),
+    );
   }
 
   // @ts-expect-error return type is LiteralString
@@ -48,7 +56,7 @@ class LiteralString extends String {
   substring(indexStart: number, indexEnd?: number): LiteralString {
     return new LiteralString(super.substring(indexStart, indexEnd));
   }
-  
+
   // @ts-expect-error return type is LiteralString
   toLowerCase(): LiteralString {
     return new LiteralString(super.toLowerCase());

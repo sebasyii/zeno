@@ -3,8 +3,13 @@ import literal from '../literal';
 const { l, LiteralString, isLiteralString } = literal;
 
 const arrayEqual = (array1: unknown[], array2: unknown[]): boolean => {
-  return array1.length === array2.length && array1.every((value, index) => { return value == array2[index]})
-}
+  return (
+    array1.length === array2.length &&
+    array1.every((value, index) => {
+      return value == array2[index];
+    })
+  );
+};
 
 describe('#LiteralString', () => {
   it('class constructor', () => {
@@ -76,10 +81,14 @@ describe('#LiteralString', () => {
     expect(l`hello`.concat('world') instanceof LiteralString).toBeFalsy();
     expect(l`hello`.concat(l`world`) == 'helloworld').toBeTruthy();
     expect(l`hello`.concat(l`world`) instanceof LiteralString).toBeTruthy();
-    expect(l`hello`.concat(l`world`, '123')  == 'helloworld123').toBeTruthy();
-    expect(l`hello`.concat(l`world`, '123') instanceof LiteralString).toBeFalsy();
-    expect(l`hello`.concat(l`world`, l`123`)  == 'helloworld123').toBeTruthy();
-    expect(l`hello`.concat(l`world`, l`123`) instanceof LiteralString).toBeTruthy();
+    expect(l`hello`.concat(l`world`, '123') == 'helloworld123').toBeTruthy();
+    expect(
+      l`hello`.concat(l`world`, '123') instanceof LiteralString,
+    ).toBeFalsy();
+    expect(l`hello`.concat(l`world`, l`123`) == 'helloworld123').toBeTruthy();
+    expect(
+      l`hello`.concat(l`world`, l`123`) instanceof LiteralString,
+    ).toBeTruthy();
   });
 
   it('replace', () => {
@@ -96,7 +105,9 @@ describe('#LiteralString', () => {
     expect(l`hello`.replace(/l/g, l`L`) instanceof LiteralString).toBeTruthy();
 
     expect(l`hello`.replace(/l/g, () => 'L') == 'heLLo').toBeTruthy();
-    expect(l`hello`.replace(/l/g, () => 'L') instanceof LiteralString).toBeFalsy();
+    expect(
+      l`hello`.replace(/l/g, () => 'L') instanceof LiteralString,
+    ).toBeFalsy();
   });
 
   it('slice', () => {
@@ -108,12 +119,22 @@ describe('#LiteralString', () => {
   it('split', () => {
     expect(arrayEqual(l``.split(), [''])).toBeTruthy();
     expect(arrayEqual(l`hello`.split(), ['hello'])).toBeTruthy();
-    expect(arrayEqual(l`hello,world`.split(','), ['hello', 'world'])).toBeTruthy();
+    expect(
+      arrayEqual(l`hello,world`.split(','), ['hello', 'world']),
+    ).toBeTruthy();
     expect(l`hello,world`.split(',')[0] instanceof LiteralString).toBeTruthy();
     expect(l`hello,world`.split(',')[1] instanceof LiteralString).toBeTruthy();
 
-    expect(l`Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand `.split(/\s*(?:;|$)\s*/)[0] == 'Harry Trump').toBeTruthy();
-    expect(l`Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand `.split(/\s*(?:;|$)\s*/)[0] instanceof LiteralString).toBeTruthy();
+    expect(
+      l`Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand `.split(
+        /\s*(?:;|$)\s*/,
+      )[0] == 'Harry Trump',
+    ).toBeTruthy();
+    expect(
+      l`Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand `.split(
+        /\s*(?:;|$)\s*/,
+      )[0] instanceof LiteralString,
+    ).toBeTruthy();
   });
 
   it('substring', () => {
