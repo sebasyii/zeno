@@ -71,12 +71,64 @@ caller(userInput, l`bar`, l`baz`);
 
 ## String Methods
 
-The following methods can return `LiteralString`s.
+The following [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/) methods can return an l-string when called on l-strings:
 
 ### `LiteralString.concat(str1, str2, /* …, */ strN)`
+
+Cconcatenates the string arguments to the calling l-string.
 
 Returns a `LiteralString` if all arguments are `LiteralString`s, otherwise returns a regular string.
 
 ### `LiteralString.replace(searchValue, replaceValue)`
 
+Replaces `searchValue` with `replaceValue`.
+
 Returns a `LiteralString` if `replaceValue` is a `LiteralString`, otherwise returns a regular string.
+
+### `LiteralString.slice(indexStart[, indexEnd])`
+
+Extracts a section of a l-string and returns a new l-string.
+
+Returns a `LiteralString`.
+
+### `LiteralString.split([seperator[, limit]])`
+
+Divides a l-string into an ordered list of substrings, puts these substrings into an array, and returns the array.
+
+Returns an array of `LiteralString`s.
+
+### `LiteralString.substring(indexStart[, indexEnd])`
+
+Extracts the characters in a l-string between `indexStart` and `indexEnd`, not including `indexEnd` itself.
+
+Returns a `LiteralString`.
+
+### `LiteralString.toLowerCase()`
+
+Returns the calling l-string value converted to lower case.
+
+Returns a `LiteralString`.
+
+### `LiteralString.toUpperCase()`
+
+Returns the calling l-string value converted to upper case.
+
+Returns a `LiteralString`.
+
+### `LiteralString.trim()`
+
+Removes whitespace from both ends of a l-string.
+
+Returns a `LiteralString`.
+
+### `LiteralString.trimEnd()`
+
+Removes whitespace from the end of a l-string.
+
+Returns a `LiteralString`.
+
+### `LiteralString.trimStart()`
+
+Removes whitespace from the beginning of a l-string.
+
+Returns a `LiteralString`.

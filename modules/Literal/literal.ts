@@ -23,10 +23,55 @@ class LiteralString extends String {
   }
 
   // @ts-expect-error return type is LiteralString
+  repeat(count: number): LiteralString {
+    return new LiteralString(super.repeat(count));
+  }
+
+  // @ts-expect-error return type is LiteralString
   replace(pattern: LiteralString | string | RegExp, replacement: LiteralString | string | ((substring: string, ...args: any[]) => string)): LiteralString | string {
     if (!isLiteralString(replacement))
       return super.replace(pattern as string | RegExp, replacement);
     return new LiteralString(super.replace(pattern as string | RegExp, replacement as string));
+  }
+
+  // @ts-expect-error return type is LiteralString
+  slice(indexStart: number, indexEnd?: number): LiteralString {
+    return new LiteralString(super.slice(indexStart, indexEnd));
+  }
+
+  // @ts-expect-error return type is LiteralString
+  split(separator?: string | RegExp, limit?: number): LiteralString[] {
+    return super.split(separator, limit).map((s) => new LiteralString(s));
+  }
+
+  // @ts-expect-error return type is LiteralString
+  substring(indexStart: number, indexEnd?: number): LiteralString {
+    return new LiteralString(super.substring(indexStart, indexEnd));
+  }
+  
+  // @ts-expect-error return type is LiteralString
+  toLowerCase(): LiteralString {
+    return new LiteralString(super.toLowerCase());
+  }
+
+  // @ts-expect-error return type is LiteralString
+  toUpperCase(): LiteralString {
+    return new LiteralString(super.toUpperCase());
+  }
+
+  // @ts-expect-error return type is LiteralString
+  trim(): LiteralString {
+    return new LiteralString(super.trim());
+  }
+
+  // @ts-expect-error return type is LiteralString
+  trimEnd(): LiteralString {
+    return new LiteralString(super.trimEnd());
+  }
+
+  // @ts-expect-error return type is LiteralString
+  trimStart(): LiteralString {
+    return new LiteralString(super.trimStart());
   }
 }
 
