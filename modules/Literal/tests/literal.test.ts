@@ -53,12 +53,6 @@ describe('#LiteralString', () => {
     expect(isLiteralString(w)).toBeTruthy();
 
     expect(v == 'e helloworldhello world').toBeTruthy();
-  });
-
-  it('concatenation', () => {
-    const s: unknown = l`SELECT * FROM ` + 'users;';
-    expect(s).toBe('SELECT * FROM users;');
-    expect(s instanceof LiteralString).toBeFalsy();
 
     expect(() => {
       l`SELECT * FROM ${'users'};`;
@@ -67,5 +61,37 @@ describe('#LiteralString', () => {
       l`SELECT * FROM ${l`users`};` == 'SELECT * FROM users;',
     ).toBeTruthy();
     expect(l`SELECT * FROM ${l`users`};` instanceof LiteralString).toBeTruthy();
+  });
+
+  it('concatenation', () => {
+    const x: unknown = l`SELECT * FROM ` + 'users;';
+    expect(x).toBe('SELECT * FROM users;');
+    expect(x instanceof LiteralString).toBeFalsy();
+
+    expect(l`hello`.concat('world') == 'helloworld').toBeTruthy();
+    expect(l`hello`.concat('world') instanceof LiteralString).toBeFalsy();
+    expect(l`hello`.concat(l`world`) == 'helloworld').toBeTruthy();
+    expect(l`hello`.concat(l`world`) instanceof LiteralString).toBeTruthy();
+    expect(l`hello`.concat(l`world`, '123')  == 'helloworld123').toBeTruthy();
+    expect(l`hello`.concat(l`world`, '123') instanceof LiteralString).toBeFalsy();
+    expect(l`hello`.concat(l`world`, l`123`)  == 'helloworld123').toBeTruthy();
+    expect(l`hello`.concat(l`world`, l`123`) instanceof LiteralString).toBeTruthy();
+  });
+
+  it('replace', () => {
+    expect(l`hello`.replace('l', 'L') == 'heLlo').toBeTruthy();
+    expect(l`hello`.replace('l', 'L') instanceof LiteralString).toBeFalsy();
+    expect(l`hello`.replace(l`l`, 'L') == 'heLlo').toBeTruthy();
+    expect(l`hello`.replace(l`l`, 'L') instanceof LiteralString).toBeFalsy();
+    expect(l`hello`.replace(l`l`, l`L`) == 'heLlo').toBeTruthy();
+    expect(l`hello`.replace(l`l`, l`L`) instanceof LiteralString).toBeTruthy();
+
+    expect(l`hello`.replace(/l/g, 'L') == 'heLLo').toBeTruthy();
+    expect(l`hello`.replace(/l/g, 'L') instanceof LiteralString).toBeFalsy();
+    expect(l`hello`.replace(/l/g, l`L`) == 'heLLo').toBeTruthy();
+    expect(l`hello`.replace(/l/g, l`L`) instanceof LiteralString).toBeTruthy();
+
+    expect(l`hello`.replace(/l/g, () => 'L') == 'heLLo').toBeTruthy();
+    expect(l`hello`.replace(/l/g, () => 'L') instanceof LiteralString).toBeFalsy();
   });
 });

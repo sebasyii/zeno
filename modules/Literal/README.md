@@ -68,3 +68,12 @@ const caller = (arbitraryString, queryString, tableName) => {
 userInput = 'foo';
 caller(userInput, l`bar`, l`baz`);
 ```
+
+## String Methods
+
+The following methods can return `LiteralString`s.
+
+### `LiteralString.concat(str1, str2, /* …, */ strN)`
+
+Returns a `LiteralString` if all arguments are `LiteralString`s, otherwise returns a regular string.
+

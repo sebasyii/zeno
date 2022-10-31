@@ -14,6 +14,20 @@ class LiteralString extends String {
     super(...args);
     return this;
   }
+
+  // @ts-expect-error return type is LiteralString
+  concat(...args: (LiteralString | string)[]): LiteralString | string {
+    if (!args.every((arg) => isLiteralString(arg)))
+      return super.concat(...args as string[]);
+    return new LiteralString(super.concat(...args as string[]));
+  }
+
+  // @ts-expect-error return type is LiteralString
+  replace(pattern: LiteralString | string | RegExp, replacement: LiteralString | string | ((substring: string, ...args: any[]) => string)): LiteralString | string {
+    if (!isLiteralString(replacement))
+      return super.replace(pattern as string | RegExp, replacement);
+    return new LiteralString(super.replace(pattern as string | RegExp, replacement as string));
+  }
 }
 
 const l = (
