@@ -41,10 +41,10 @@ Use l-strings to create and construct static strings, then validate that the fin
 ```javascript
 const { literal } = require('@zenots/zeno');
 
-const { l, LiteralString } = literal;
+const { l, isLiteralString } = literal;
 
 const runQuery = (sql) => {
-  if (sql instanceof LiteralString) {
+  if (isLiteralString(sql)) {
     console.log(`This is a safe literal string: ${sql}`);
   } else {
     console.log(`Not a literal string, could be unsafe: ${sql}`);
@@ -67,20 +67,4 @@ const caller = (arbitraryString, queryString, tableName) => {
 
 userInput = 'foo';
 caller(userInput, l`bar`, l`baz`);
-```
-
-Users are also provided with `isLiteralString()` to check if a string is an l-string.
-
-```javascript
-const { literal } = require('@zenots/zeno');
-
-const { l, isLiteralString } = literal;
-
-const runQuery = (sql) => {
-  if (isLiteralString(sql)) {
-    console.log(`This is a safe literal string: ${sql}`);
-  } else {
-    console.log(`Not a literal string, could be unsafe: ${sql}`);
-  }
-};
 ```
