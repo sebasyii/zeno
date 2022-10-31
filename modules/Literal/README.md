@@ -14,7 +14,7 @@ By differentiating developer-defined, static strings from dynamic ones construct
 
 ## Example Usage
 
-Here, we provide a way of telling regular strings apart from a new class of strings called `LiteralString`s (or as we prefer, "l-strings"), allowing type checkers to enforce static strings even in vanilla JavaScript. While vanilla JavaScript is not typed, developers can easily verify l-strings using `instanceof`.
+Here, we provide a way of telling regular strings apart from a new class of strings called `LiteralString`s (or as we prefer, "l-strings"), allowing type checkers to enforce static strings even in vanilla JavaScript. While vanilla JavaScript is not typed, developers can easily verify l-strings using `isLiteralString` (or just `instanceof`).
 
 To create an l-string, use the tagged template literal:
 
