@@ -24,6 +24,13 @@ const newExternalID = (redisClient: RedisClientType) => {
   };
 };
 
+const validateKeyValue = (s: string): boolean => {
+  if (s === '__proto__' || s === 'constructor' || s === 'prototype') {
+    return false;
+  }
+  return true;
+};
+
 class Indirect implements Indirect {
   constructor(args: IndirectArgs) {
     this.redisClient = args.redisClient;
@@ -44,7 +51,7 @@ class Indirect implements Indirect {
           if (value.length === 36) {
             const internalID = await this.redisClient.HGET(model, value);
 
-            if (internalID) {
+            if (internalID && validateKeyValue(item) && validateKeyValue(key)) {
               req[item][key] = internalID;
             }
           }
