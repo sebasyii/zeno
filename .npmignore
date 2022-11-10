@@ -1,0 +1,7 @@
+node_modules
+tests
+examples/
+coverage/
+jest.config.ts
+index.ts
+README.md
